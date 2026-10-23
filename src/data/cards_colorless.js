@@ -10,7 +10,8 @@ export const cards = [
     unplayable: true,
     keywords: ['unplayable'],
     effects: [],
-    text: 'Unplayable.'
+    text: 'Unplayable.',
+    upgradeable: false
   },
   {
     id: 'c_stone',
@@ -22,6 +23,7 @@ export const cards = [
     text: 'Deal $dmg damage.',
     base: { dmg: 0 },
     up: { dmg: 0 },
+    upgradeable: false,
     effects: [ { t: 'damage', n: '$dmg' } ]
   },
   // COMMONS/UNCOMMONS/RARE COLORLESS

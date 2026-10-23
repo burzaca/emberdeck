@@ -5,7 +5,7 @@ import { DATA, validateData } from '../src/engine/registry.js';
 import { generateMap } from '../src/engine/map.js';
 import { createRun, serializeRun, deserializeRun, rollCardReward, deckCount, reachable, enterNode, encounterFor } from '../src/engine/run.js';
 import { startCombat, playCard, endTurn, liveCard, makeInstance } from '../src/engine/combat.js';
-import { dealDamage, gainBlock, addBuff, attackDamage } from '../src/engine/effects.js';
+import { dealDamage, gainBlock, addBuff, attackDamage, resolveNum } from '../src/engine/effects.js';
 
 // ---------- rng ----------
 test('rng is deterministic per seed', () => {
@@ -111,8 +111,8 @@ test('$token resolution with upgrade', () => {
   const def = DATA.cardById.get('ew_strike');
   const base = liveCard({ id: 'ew_strike', upgraded: false });
   const up = liveCard({ id: 'ew_strike', upgraded: true });
-  assert.equal(base.base.dmg + 0, def.base.dmg);
-  assert.equal(up.base.dmg, def.base.dmg + (def.up?.dmg || 0));
+  assert.equal(resolveNum('$dmg', base), def.base.dmg);
+  assert.equal(resolveNum('$dmg', up), def.base.dmg + (def.up?.dmg || 0));
 });
 
 // ---------- combat flow ----------

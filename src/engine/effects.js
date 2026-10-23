@@ -94,11 +94,18 @@ export function applyVerb(C, verb, ctx) {
   const t = verb.t;
   const n = (v) => (typeof v === 'string' && v.startsWith('$')) ? resolveNum(v, ctx.card || {}) : v;
 
+  // optional condition gate: when: {buff, target:'self'|'target', min}
+  if (verb.when) {
+    const ent = verb.when.target === 'target' ? ctx.target : self;
+    if (!ent || (ent.buffs[verb.when.buff] || 0) < (verb.when.min || 1)) return;
+  }
+
   switch (t) {
     case 'damage': {
       const base = n(verb.n);
-      const hits = verb.all ? C.enemies.filter(e => e.alive).length : (verb.hits || 1);
-      const list = verb.all ? C.enemies.filter(e => e.alive) : (ctx.target && ctx.target.alive ? [ctx.target] : []);
+      const all = verb.all || verb.hits === 'all';
+      const hits = all ? C.enemies.filter(e => e.alive).length : (verb.hits || 1);
+      const list = all ? C.enemies.filter(e => e.alive) : (ctx.target && ctx.target.alive ? [ctx.target] : []);
       for (let h = 0; h < hits; h++) {
         for (const tgt of list) {
           if (!tgt.alive) continue;
@@ -192,6 +199,7 @@ export function startPlayerTurn(C) {
   C.phase = 'player';
   C.player.block = 0;
   tickBuffsStart(C, C.player);
+  if (C.player.hp <= 0) { C.over = 'loss'; C.run.hp = 0; return; }
   C.player.energy = C.baseEnergy || 3;
   drawCards(C, C.drawPerTurn || 5);
   runRelicHooks(C, 'turn_start');

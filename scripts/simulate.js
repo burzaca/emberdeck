@@ -6,7 +6,7 @@ import {
   createRun, reachable, enterNode, encounterFor, combatRewards, takeRewardGold,
   restHeal, restUpgrade, applyRunEffects, completeNode, pickEvent,
 } from '../src/engine/run.js';
-import { startCombat, playCard, endTurn, canPlay, liveCard } from '../src/engine/combat.js';
+import { startCombat, playCard, endTurn, canPlay, liveCard, makeInstance } from '../src/engine/combat.js';
 
 const N = parseInt(process.argv[2] || '20', 10);
 const classes = process.argv[3] ? [process.argv[3]] : DATA.classes.map(c => c.id);
@@ -21,15 +21,16 @@ function autoCombat(run, C) {
     let played = true;
     while (played && !C.over) {
       played = false;
-      for (const inst of [...C.player.hand]) {
-        const chk = canPlay(C, inst);
-        if (!chk.ok) continue;
-        const card = chk.card;
-        const isAttack = (card.effects || []).some(v => v.t === 'damage');
-        if (!isAttack && C.player.energy >= 2 && (card.effects || []).some(v => v.t === 'block') && C.turn < 2) continue; // rough: block later
-        playCard(C, inst.uid, null);
-        played = true;
-        break;
+      const weakest = C.enemies.filter(e => e.alive).sort((a, b) => a.hp - b.hp)[0];
+      const tIdx = weakest ? C.enemies.indexOf(weakest) : null;
+      const playable = C.player.hand
+        .map((inst) => ({ inst, chk: canPlay(C, inst) }))
+        .filter((x) => x.chk.ok);
+      const isAtk = (x) => (x.chk.card.effects || []).some((v) => v.t === 'damage');
+      const ordered = [...playable.filter(isAtk), ...playable.filter((x) => !isAtk(x))];
+      for (const { inst, chk } of ordered) {
+        const res = playCard(C, inst.uid, isAtk({ inst, chk }) ? tIdx : null);
+        if (res.ok) { played = true; break; }
       }
     }
     if (!C.over) endTurn(C);
@@ -40,7 +41,7 @@ function autoCombat(run, C) {
 
 function pickReward(run) {
   const picks = run._rewardCards || [];
-  if (picks.length) run.deck.push({ uid: Math.floor(Math.random() * 1e9), id: picks[0].id, upgraded: picks[0].upgraded });
+  if (picks.length) run.deck.push(makeInstance(picks[0].id, picks[0].upgraded));
 }
 
 function simulate(classId, seed) {

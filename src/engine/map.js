@@ -15,7 +15,7 @@ export function generateMap(rng, act) {
       else {
         const w = [];
         w.push(['combat', 34]);
-        if (r >= 2) w.push(['elite', 9]);
+        if (r >= 4) w.push(['elite', 8]);
         w.push(['event', 13]);
         if (r >= 3 && r <= 10) w.push(['shop', 8]);
         if (r >= 4 && r <= 11) w.push(['rest', 11]);

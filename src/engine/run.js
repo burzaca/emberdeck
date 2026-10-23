@@ -75,7 +75,10 @@ export function encounterFor(run, nodeType) {
     return [run.rng.pick(elites).id];
   }
   const normals = pool.filter(e => e.tier === 'normal');
-  const count = run.row < 4 ? run.rng.int(1, 2) : run.rng.int(1, 3);
+  let count;
+  if (run.row < 4) count = 1;
+  else if (run.row < 8) count = run.rng.int(1, 2);
+  else count = run.rng.int(1, 3);
   const group = [];
   for (let i = 0; i < count; i++) group.push(run.rng.pick(normals).id);
   return group;
@@ -90,13 +93,16 @@ export function rollCardReward(run, n = 3) {
     c.rarity === rarityW &&
     deckCount(run, c.id) < 2 &&
     c.rarity !== 'basic');
-  const fallback = DATA.cards.filter(c => (c.id.startsWith(prefix) || c.id.startsWith('c_')) && c.rarity === 'common' && c.rarity !== 'basic');
+  const fallback = DATA.cards.filter(c =>
+    (c.id.startsWith(prefix) || c.id.startsWith('c_')) &&
+    c.rarity === 'common' && c.rarity !== 'basic' && deckCount(run, c.id) < 2);
   const use = pool.length ? pool : fallback;
   const picks = [];
   const chosen = new Set();
   for (let i = 0; i < n && use.length; i++) {
-    let card, guard = 0;
-    do { card = run.rng.pick(use); guard++; } while (chosen.has(card.id) && guard < 20);
+    const candidates = use.filter(c => !chosen.has(c.id));
+    if (!candidates.length) break;
+    const card = run.rng.pick(candidates);
     chosen.add(card.id);
     const upgraded = run.act >= 2 && run.rng.chance(0.4) && card.upgradeable !== false;
     picks.push({ id: card.id, upgraded });

@@ -12,10 +12,10 @@ import { classes } from '../data/classes.js';
 export const VALID_BUFFS = new Set(['strength','dexterity','vulnerable','frail','poison','regen','thorns','ritual','metallicize','entangle','wrath','shield']);
 export const VALID_VERBS = new Set(['damage','block','buff','draw','discard_all','heal','self_damage','gold','add_card','exhaust_hand','lose_block','energy','hp_loss_pct','double_next_block','vuln_all','none']);
 export const VALID_RUN_VERBS = new Set(['upgrade_random','remove_card','gain_relic','gain_gold','lose_gold','gain_potion']);
-export const VALID_INTENTS = new Set(['attack','block','debuff','buff','attack_debuff','strength_up']);
+export const VALID_INTENTS = new Set(['attack','block','debuff','buff','attack_debuff','strength_up','ritual']);
 export const VALID_HOOKS = new Set(['combat_start','turn_start','turn_end','card_played','enemy_died','combat_end','rest','map_move','damaged']);
 export const VALID_TYPES = new Set(['attack','skill','power']);
-export const VALID_RARITIES = new Set(['basic','common','uncommon','rare','boss','shop','starter']);
+export const VALID_RARITIES = new Set(['basic','common','uncommon','rare','boss','shop','starter','curse','status']);
 export const VALID_TARGETS = new Set(['enemy','all_enemies','self','none']);
 
 const allCards = [...ewCards, ...vdCards, ...gwCards, ...cCards];
@@ -91,7 +91,7 @@ export function validateData() {
   for (const ev of DATA.events) {
     if (seen.has(ev.id)) errors.push(`duplicate event id '${ev.id}'`); seen.add(ev.id);
     for (const o of ev.options || []) checkEffects(o.effects, `event ${ev.id}.${o.label}`);
-    if (!(ev.options || []).some(o => /leave|walk away|nothing/i.test(o.label))) errors.push(`event ${ev.id}: no safe leave option`);
+    if (!(ev.options || []).some(o => /leave|walk away|nothing|decline|refuse|leave it|pass/i.test(o.label))) errors.push(`event ${ev.id}: no safe leave option`);
   }
   for (const cl of DATA.classes) {
     if (seen.has(cl.id)) errors.push(`duplicate class id '${cl.id}'`); seen.add(cl.id);

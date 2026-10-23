@@ -8,14 +8,18 @@ import {
   addPotion, addRelic,
 } from '../engine/run.js';
 import {
-  startCombat, playCard, endTurn, canPlay, liveCard, enemyIntents, usePotion,
+  startCombat, playCard, endTurn, canPlay, liveCard, usePotion, enemyIntents, makeInstance,
 } from '../engine/combat.js';
 import { BUFF_INFO } from '../engine/effects.js';
 import { el, $id, show, toast, initTooltips, modal, closeModal, esc } from './dom.js';
 import { cardNode } from './cards.js';
+import { sfx } from './sfx.js';
 
 const SAVE_KEY = 'emberd…e.v1';
 const G = { run: null, combat: null, selectedUid: null, reward: null, takenCards: false };
+window.__emberdeck = G; // debug/test hook
+window.__forceShop = () => { if (G.run) { G.run.shop = generateShop(G.run); showShop(); } };
+window.__forceRest = () => { if (G.run) showRest(); };
 
 // ---------- boot ----------
 window.addEventListener('DOMContentLoaded', () => {
@@ -184,6 +188,7 @@ function renderPotionsBar(targetEl) {
 }
 
 function goNode(row, col) {
+  sfx.click();
   const node = enterNode(G.run, row, col);
   switch (node.type) {
     case 'combat': case 'elite': case 'boss': {
@@ -320,6 +325,7 @@ function intentBadge(it) {
     case 'debuff': return '⬇';
     case 'attack_debuff': return `⚔${it.dmg} ⬇`;
     case 'strength_up': return '⬆';
+    case 'ritual': return '🔮';
     default: return '?';
   }
 }
@@ -331,7 +337,8 @@ function onCardClick(inst, card) {
     G.selectedUid = G.selectedUid === inst.uid ? null : inst.uid;
     renderCombat();
   } else {
-    playCard(C, inst.uid);
+    const r = playCard(C, inst.uid);
+    if (r.ok) sfx.card();
     afterAction();
   }
 }
@@ -341,7 +348,8 @@ function onEnemyClick(idx) {
   if (!G.selectedUid) return;
   const inst = C.player.hand.find(i => i.uid === G.selectedUid);
   if (!inst) return;
-  playCard(C, inst.uid, idx);
+  const r = playCard(C, inst.uid, idx);
+  if (r.ok) sfx.card();
   G.selectedUid = null;
   afterAction();
 }
@@ -357,6 +365,7 @@ $id('btn-endturn')?.addEventListener('click', () => {});
 document.addEventListener('click', (e) => {
   if (e.target.id === 'btn-endturn' && G.combat && !G.combat.over) {
     G.selectedUid = null;
+    sfx.click();
     endTurn(G.combat);
     G.run.stats.turns++;
     afterAction();
@@ -364,6 +373,7 @@ document.addEventListener('click', (e) => {
 });
 
 function winCombat() {
+  sfx.coin();
   const C = G.combat;
   tallyStats(C);
   const nodeType = G.run.node.type;
@@ -375,6 +385,7 @@ function winCombat() {
 }
 
 function loseCombat() {
+  sfx.death();
   const C = G.combat;
   tallyStats(C);
   G.run.hp = Math.max(0, C.player.hp);
@@ -419,7 +430,8 @@ function showReward() {
         chosen = true;
         row.querySelectorAll('.card').forEach(c => c.classList.add('disabled'));
         n.classList.add('picked');
-        G.run.deck.push({ uid: Math.floor(Math.random() * 1e9) + Date.now(), id: pick.id, upgraded: pick.upgraded });
+        G.run.deck.push(makeInstance(pick.id, pick.upgraded));
+        sfx.coin();
         toast(`Added ${card.name}${pick.upgraded ? ' +' : ''}`);
       } });
       row.append(n);
@@ -448,7 +460,7 @@ function showRest() {
   h1.append(el('h3', null, `Rest — heal ${healAmt} HP`));
   h1.append(el('p', null, `❤ ${G.run.hp}/${G.run.maxHp}`));
   const b1 = el('button', 'big-btn', 'Sleep');
-  b1.addEventListener('click', () => { const got = restHeal(G.run); toast(`+${got} HP`); finishNode(); });
+  b1.addEventListener('click', () => { sfx.heal(); const got = restHeal(G.run); toast(`+${got} HP`); finishNode(); });
   h1.append(b1);
   const h2 = el('div', 'option-card');
   h2.append(el('h3', null, 'Smith — upgrade a card'));
@@ -458,7 +470,7 @@ function showRest() {
     closeModal();
     toast('Card upgraded');
     finishNode();
-  }));
+  }, (def, inst) => def.upgradeable !== false && !inst.upgraded));
   h2.append(b2);
   body.append(h1, h2);
 }
@@ -539,12 +551,13 @@ function showEvent() {
 }
 
 // ---------- pickers / modals ----------
-function pickCardModal(title, onPick) {
+function pickCardModal(title, onPick, filter) {
   const wrap = el('div', 'picker');
   wrap.append(el('h3', null, title));
   const row = el('div', 'card-row scrollable');
   for (const inst of G.run.deck) {
     const def = DATA.cardById.get(inst.id);
+    if (filter && !filter(def, inst)) continue;
     const card = { ...def, base: def.base || {}, _upgraded: inst.upgraded };
     row.append(cardNode(card, { small: true, onClick: () => onPick(inst.uid) }));
   }
@@ -619,6 +632,7 @@ function showEnd() {
   show('screen-end');
   updateTopbar();
   const win = G.run.finished === 'victory';
+  if (win) sfx.victory();
   if (win) clearSave();
   const body = $id('end-body');
   body.innerHTML = '';

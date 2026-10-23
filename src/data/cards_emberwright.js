@@ -68,7 +68,7 @@ export const cards = [
     up: { dmg: 3, bonus: 2 },
     effects: [
       { t: 'damage', n: '$dmg' },
-      { t: 'damage', n: '$bonus' } 
+      { t: 'damage', n: '$bonus', when: { buff: 'strength' } }
     ]
   },
   {
@@ -93,7 +93,7 @@ export const cards = [
     type: 'power',
     rarity: 'common',
     target: 'self',
-    text: 'At end of turn, lose $hp HP and gain $str Strength.',
+    text: 'Lose $hp HP. Gain $str Strength.',
     base: { hp: 1, str: 1 },
     up: { hp: 0, str: 1 },
     effects: [
@@ -154,7 +154,7 @@ export const cards = [
     type: 'power',
     rarity: 'uncommon',
     target: 'self',
-    text: 'Whenever you play an Attack, gain $str Strength.',
+    text: 'Gain $str Strength.',
     base: { str: 1 },
     up: { str: 1 },
     effects: [ { t: 'buff', target: 'self', buff: 'strength', n: '$str' } ]
@@ -178,7 +178,7 @@ export const cards = [
     type: 'power',
     rarity: 'uncommon',
     target: 'self',
-    text: 'Start turn: gain $str Strength. Lose $hp HP.',
+    text: 'Gain $str Strength. Lose $hp HP.',
     base: { str: 2, hp: 1 },
     up: { str: 1, hp: 0 },
     effects: [
@@ -196,7 +196,7 @@ export const cards = [
     text: 'Deal $dmg damage. If enemy is Vulnerable, deal $bonus more.',
     base: { dmg: 8, bonus: 6 },
     up: { dmg: 3, bonus: 2 },
-    effects: [ { t: 'damage', n: '$dmg' }, { t: 'damage', n: '$bonus' } ]
+    effects: [ { t: 'damage', n: '$dmg' }, { t: 'damage', n: '$bonus', when: { buff: 'vulnerable', target: 'target' } } ]
   },
   {
     id: 'ew_emberstorm',
@@ -233,7 +233,7 @@ export const cards = [
     type: 'power',
     rarity: 'rare',
     target: 'self',
-    text: 'At start of turn: gain $str Strength and $dex Dexterity.',
+    text: 'Gain $str Strength and $dex Dexterity.',
     base: { str: 2, dex: 2 },
     up: { str: 1, dex: 1 },
     effects: [
@@ -260,7 +260,7 @@ export const cards = [
     type: 'power',
     rarity: 'rare',
     target: 'self',
-    text: 'Whenever you lose HP, gain $str Strength.',
+    text: 'Gain $str Strength.',
     base: { str: 2 },
     up: { str: 1 },
     effects: [ { t: 'buff', target: 'self', buff: 'strength', n: '$str' } ]
@@ -313,7 +313,7 @@ export const cards = [
     type: 'power',
     rarity: 'uncommon',
     target: 'self',
-    text: 'Block also deals $thn Thorns damage for 1 turn.',
+    text: 'Gain $thn Thorns.',
     base: { thn: 2 },
     up: { thn: 1 },
     effects: [ { t: 'buff', target: 'self', buff: 'thorns', n: '$thn' } ]
@@ -341,5 +341,17 @@ export const cards = [
     base: { dmg: 5 },
     up: { dmg: 2 },
     effects: [ { t: 'damage', n: '$dmg' }, { t: 'add_card', card: 'c_stone', to: 'hand', n: 1 } ]
-  }
+  },
+  {
+    id: 'ew_spark',
+    name: 'Spark',
+    cost: 0,
+    type: 'attack',
+    rarity: 'common',
+    target: 'enemy',
+    text: 'Deal $dmg damage.',
+    base: { dmg: 3 },
+    up: { dmg: 2 },
+    effects: [ { t: 'damage', n: '$dmg' } ]
+  },
 ];

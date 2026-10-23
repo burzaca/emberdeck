@@ -4,7 +4,7 @@
   "description": "EMBERDECK — a deck-building dungeon crawler that runs in your browser. No build step, no dependencies.",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/",
+    "test": "node --test tests/*.test.js",
     "sim": "node scripts/simulate.js",
     "serve": "python3 -m http.server 8080"
   },

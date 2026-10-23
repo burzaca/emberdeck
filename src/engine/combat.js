@@ -62,8 +62,7 @@ function planAllEnemies(C) {
 
 function pickMove(C, e) {
   const def = e.data;
-  const turn = C.turn + 1; // move executes on the upcoming enemy phase
-  if (turn === 1 && def.opener) return def.moves.find(m => m.id === def.opener);
+  if (!e.hasActed && def.opener) return def.moves.find(m => m.id === def.opener);
   let pool = def.moves.filter(m => m.weight > 0);
   if (def.no_repeat && e.lastMove && pool.length > 1) pool = pool.filter(m => m.id !== e.lastMove);
   if (pool.length === 0) pool = def.moves;
@@ -95,7 +94,10 @@ export function playCard(C, uid, targetIdx = null) {
   C.player.energy -= card.cost;
   C.player.hand.splice(idx, 1);
   C.log.push({ t: 'play_card', card: card.id, name: card.name, target: target ? target.id : null });
+  const aliveBefore = C.enemies.filter(e => e.alive).length;
   for (const v of card.effects) applyVerb(C, v, { card, target, source: 'card' });
+  const aliveAfter = C.enemies.filter(e => e.alive).length;
+  for (let i = 0; i < aliveBefore - aliveAfter; i++) runRelicHooks(C, 'enemy_died');
   if (card.exhaust) C.player.exhaust.push(inst);
   else C.player.discard.push(inst);
   runRelicHooks(C, 'card_played');
@@ -145,6 +147,7 @@ export function endTurn(C) {
     if (!e.alive) continue;
     const move = e.nextMove || pickMove(C, e);
     e.lastMove = move.id;
+    e.hasActed = true;
     executeEnemyMove(C, e, move);
     if (C.over) return;
     // enemy end-of-turn decay
@@ -154,6 +157,7 @@ export function endTurn(C) {
     if (e.buffs.ritual) addBuff(e, 'strength', e.buffs.ritual);
   }
   planAllEnemies(C);
+  checkOver(C);
   if (!C.over) startPlayerTurn(C);
 }
 
@@ -175,6 +179,7 @@ function executeEnemyMove(C, e, move) {
     case 'block': gainBlock(e, move.block || 0); break;
     case 'buff': if (move.buff) addBuff(e, move.buff.buff, move.buff.n); break;
     case 'strength_up': addBuff(e, 'strength', move.n || 0); break;
+    case 'ritual': addBuff(e, 'ritual', move.n || 0); break;
     case 'debuff': if (move.debuff) addBuff(C.player, move.debuff.buff, move.debuff.n); break;
     case 'attack_debuff': {
       const hits = move.hits || 1;
