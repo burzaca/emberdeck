@@ -45,6 +45,17 @@ empty for a random one, or type a word for a deterministic map.
 - Rest sites: heal 30% or upgrade a card. Shops sell cards, potions, relics, and
   a card-removal service.
 
+## Difficulty (honest numbers)
+
+The game was balanced with an automated playtester (`npm run sim` — a headless
+auto-player that blocks, drinks potions, shops and upgrades like a cautious
+human). Its results after tuning: Act 1 is cleared ~60% of the time; it usually
+falls to an Act 2 boss. Strong hand-built decks beat the Act 3 bosses 1–5/10 —
+they are meant to be final bosses. The author also beat Act 1 by hand (Emberwright,
+seeded run) to verify the human path: reading intents, thinning the deck at
+every card-removal offer, and defending against the big ⚔ numbers is the winning
+line. The bot is a conservative sparring partner; a good human does better.
+
 ## Controls
 
 - Click a node on the map to travel (only glowing nodes are reachable).
