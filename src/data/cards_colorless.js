@@ -3,6 +3,7 @@ export const cards = [
   {
     id: 'c_curse_bind',
     name: 'Bind',
+    art: '🔮',
     cost: 0,
     type: 'skill',
     rarity: 'curse',
@@ -16,6 +17,7 @@ export const cards = [
   {
     id: 'c_stone',
     name: 'Stone',
+    art: '🪨',
     cost: 1,
     type: 'attack',
     rarity: 'status',
@@ -30,6 +32,7 @@ export const cards = [
   {
     id: 'c_flash',
     name: 'Flash',
+    art: '⚡',
     cost: 0,
     type: 'attack',
     rarity: 'common',
@@ -42,6 +45,7 @@ export const cards = [
   {
     id: 'c_safeguard',
     name: 'Safeguard',
+    art: '🛡',
     cost: 1,
     type: 'skill',
     rarity: 'common',
@@ -54,6 +58,7 @@ export const cards = [
   {
     id: 'c_trickster',
     name: 'Trickster',
+    art: '🃏',
     cost: 1,
     type: 'skill',
     rarity: 'uncommon',
@@ -66,6 +71,7 @@ export const cards = [
   {
     id: 'c_mirror',
     name: 'Mirror',
+    art: '🪞',
     cost: 1,
     type: 'skill',
     rarity: 'uncommon',
@@ -138,6 +144,7 @@ export const cards = [
   {
     id: 'c_shieldwall',
     name: 'Shieldwall',
+    art: '🛡',
     cost: 2,
     type: 'skill',
     rarity: 'rare',

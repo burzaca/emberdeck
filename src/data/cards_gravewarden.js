@@ -2,20 +2,20 @@
 // Do not edit card schema without docs/CONTENT_SCHEMA.md approval.
 export const cards = [
 {
-  id: 'gw_strike', name: 'Grave Slash', cost: 1, type: 'attack', rarity: 'basic', target: 'enemy',
+  id: 'gw_strike', name: 'Grave Slash', art: '🗡', cost: 1, type: 'attack', rarity: 'basic', target: 'enemy',
   text: 'Deal $dmg damage.',
   base: { dmg: 6 }, up: { dmg: 4 },
   effects: [ { t:'damage', n:'$dmg' } ],
 },
 {
-  id: 'gw_guard', name: 'Mourner’s Guard', cost: 1, type: 'skill', rarity: 'basic', target: 'self',
+  id: 'gw_guard', name: 'Mourner’s Guard', art: '🛡', cost: 1, type: 'skill', rarity: 'basic', target: 'self',
   text: 'Gain $blk Block.',
   base: { blk: 6 }, up: { blk: 4 },
   effects: [ { t:'block', n:'$blk' } ],
 },
 // Commons
 {
-  id: 'gw_bone_shard', name: 'Bone Shard', cost: 1, type: 'attack', rarity: 'common', target: 'enemy',
+  id: 'gw_bone_shard', name: 'Bone Shard', art: '🦴', cost: 1, type: 'attack', rarity: 'common', target: 'enemy',
   text: 'Deal $dmg damage. Apply $vn Vulnerable.',
   base: { dmg: 7, vn: 1 }, up: { dmg: 3, vn: 1 },
   effects: [ { t:'damage', n:'$dmg' }, { t:'buff', target:'target', buff:'vulnerable', n:'$vn' } ],
@@ -33,7 +33,7 @@ export const cards = [
   effects: [ { t:'buff', target:'target', buff:'poison', n:'$psn' }, { t:'buff', target:'target', buff:'frail', n:'$fr' } ],
 },
 {
-  id: 'gw_sacrifice', name: 'Sacrifice', cost: 0, type: 'skill', rarity: 'common', target: 'self',
+  id: 'gw_sacrifice', name: 'Sacrifice', art: '🧊', cost: 0, type: 'skill', rarity: 'common', target: 'self',
   text: 'Lose $hp HP. Draw $draw cards.',
   base: { hp: 2, draw: 2 }, up: { hp: 1, draw: 1 },
   effects: [ { t:'self_damage', n:'$hp' }, { t:'draw', n:'$draw' } ],
@@ -46,25 +46,25 @@ export const cards = [
 },
 // Uncommons
 {
-  id: 'gw_entangle', name: 'Entangling Grasp', cost: 1, type: 'skill', rarity: 'uncommon', target: 'enemy',
+  id: 'gw_entangle', name: 'Entangling Grasp', art: '🕸', cost: 1, type: 'skill', rarity: 'uncommon', target: 'enemy',
   text: 'Apply $ent Entangle.',
   base: { ent: 1 }, up: { ent: 1 },
   effects: [ { t:'buff', target:'target', buff:'entangle', n:'$ent' } ],
 },
 {
-  id: 'gw_withering', name: 'Withering Hex', cost: 2, type: 'skill', rarity: 'uncommon', target: 'enemy',
+  id: 'gw_withering', name: 'Withering Hex', art: '🔮', cost: 2, type: 'skill', rarity: 'uncommon', target: 'enemy',
   text: 'Apply $psn Poison. Apply $vn Vulnerable.',
   base: { psn: 6, vn: 2 }, up: { psn: 3, vn: 1 },
   effects: [ { t:'buff', target:'target', buff:'poison', n:'$psn' }, { t:'buff', target:'target', buff:'vulnerable', n:'$vn' } ],
 },
 {
-  id: 'gw_necrotic', name: 'Necrotic Strength', cost: 1, type: 'power', rarity: 'uncommon', target: 'self',
+  id: 'gw_necrotic', name: 'Necrotic Strength', art: '💪', cost: 1, type: 'power', rarity: 'uncommon', target: 'self',
   text: 'Lose $hp HP. Gain $str Strength.',
   base: { hp: 2, str: 2 }, up: { hp: 1, str: 1 },
   effects: [ { t:'self_damage', n:'$hp' }, { t:'buff', target:'self', buff:'strength', n:'$str' } ],
 },
 {
-  id: 'gw_tombshield', name: 'Tomb Shield', cost: 1, type: 'skill', rarity: 'uncommon', target: 'self',
+  id: 'gw_tombshield', name: 'Tomb Shield', art: '🛡', cost: 1, type: 'skill', rarity: 'uncommon', target: 'self',
   text: 'Gain $blk Block. Gain $shd Shield.',
   base: { blk: 7, shd: 2 }, up: { blk: 3, shd: 1 },
   effects: [ { t:'block', n:'$blk' }, { t:'buff', target:'self', buff:'shield', n:'$shd' } ],
@@ -89,25 +89,25 @@ export const cards = [
   effects: [ { t:'buff', target:'self', buff:'metallicize', n:'$mtc' }, { t:'self_damage', n:'$hp' } ],
 },
 {
-  id: 'gw_deathbloom', name: 'Deathbloom', cost: 2, type: 'attack', rarity: 'rare', target: 'all_enemies',
+  id: 'gw_deathbloom', name: 'Deathbloom', art: '🌸', cost: 2, type: 'attack', rarity: 'rare', target: 'all_enemies',
   text: 'Deal $dmg damage to ALL enemies. Apply $psn Poison.',
   base: { dmg: 9, psn: 5 }, up: { dmg: 5, psn: 3 },
   effects: [ { t:'damage', n:'$dmg', hits:'all' }, { t:'buff', target:'all_enemies', buff:'poison', n:'$psn' } ],
 },
 {
-  id: 'gw_dirge', name: 'Dirge', cost: 3, type: 'power', rarity: 'rare', target: 'self',
+  id: 'gw_dirge', name: 'Dirge', art: '🎻', cost: 3, type: 'power', rarity: 'rare', target: 'self',
   text: 'Gain $tg Thorns. At combat end, gain $str Strength.',
   base: { tg: 4, str: 2 }, up: { tg: 2, str: 1 },
   effects: [ { t:'buff', target:'self', buff:'thorns', n:'$tg' }, { t:'buff', target:'self', buff:'strength', n:'$str' } ],
 },
 {
-  id: 'gw_witherstrike', name: 'Witherstrike', cost: 2, type: 'attack', rarity: 'rare', target: 'enemy',
+  id: 'gw_witherstrike', name: 'Witherstrike', art: '🗡', cost: 2, type: 'attack', rarity: 'rare', target: 'enemy',
   text: 'Deal $dmg damage. Apply $psn Poison. Apply $vn Vulnerable.',
   base: { dmg: 15, psn: 6, vn: 2 }, up: { dmg: 6, psn: 3, vn: 1 },
   effects: [ { t:'damage', n:'$dmg' }, { t:'buff', target:'target', buff:'poison', n:'$psn' }, { t:'buff', target:'target', buff:'vulnerable', n:'$vn' } ],
 },
 {
-  id: 'gw_astral', name: 'Astral Chain', cost: 1, type: 'power', rarity: 'rare', target: 'self',
+  id: 'gw_astral', name: 'Astral Chain', art: '⛓', cost: 1, type: 'power', rarity: 'rare', target: 'self',
   text: 'At start of turn, gain $blk Block. Draw $draw cards.',
   base: { blk: 4, draw: 1 }, up: { blk: 2, draw: 1 },
   effects: [ { t:'buff', target:'self', buff:'metallicize', n:'$blk' }, { t:'draw', n:'$draw' } ],
@@ -125,7 +125,7 @@ export const cards = [
   effects: [ { t:'damage', n:'$dmg', hits:'all' }, { t:'buff', target:'all_enemies', buff:'frail', n:'$fr' } ],
 },
 {
-  id: 'gw_gravegift', name: 'Gravegift', cost: 0, type: 'skill', rarity: 'common', target: 'self',
+  id: 'gw_gravegift', name: 'Gravegift', art: '💀', cost: 0, type: 'skill', rarity: 'common', target: 'self',
   text: 'Gain $blk Block. Lose $hp HP.',
   base: { blk: 4, hp: 2 }, up: { blk: 1, hp: 1 },
   effects: [ { t:'block', n:'$blk' }, { t:'self_damage', n:'$hp' } ],
@@ -139,6 +139,7 @@ export const cards = [
   {
     id: 'gw_grasp',
     name: 'Grave Grasp',
+    art: '💀',
     cost: 1,
     type: 'attack',
     rarity: 'common',

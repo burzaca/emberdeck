@@ -19,9 +19,9 @@ export function cardNode(card, opts = {}) {
   n.style.setProperty('--glow', RARITY_GLOW[card.rarity] || 'rgba(0,0,0,0)');
   const cost = el('div', 'card-cost', String(card.cost));
   const name = el('div', 'card-name', card.name + (card._upgraded ? ' +' : ''));
-  const art = el('div', 'card-art');
+  const art = el('div', 'card-art' + (card.art ? ' has-glyph' : ''));
   art.style.background = TYPE_ART[card.type] || TYPE_ART.skill;
-  art.textContent = cardIcon(card);
+  art.textContent = card.art || cardIcon(card);
   const text = el('div', 'card-text');
   text.innerHTML = renderText(card).replace(/\n/g, '<br>');
   n.append(cost, name, art, text);

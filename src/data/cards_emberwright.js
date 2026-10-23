@@ -3,6 +3,7 @@ export const cards = [
   {
     id: 'ew_strike',
     name: 'Strike',
+    art: '🗡',
     cost: 1,
     type: 'attack',
     rarity: 'basic',
@@ -15,6 +16,7 @@ export const cards = [
   {
     id: 'ew_guard',
     name: 'Guard',
+    art: '🛡',
     cost: 1,
     type: 'skill',
     rarity: 'basic',
@@ -28,6 +30,7 @@ export const cards = [
   {
     id: 'ew_emberlash',
     name: 'Ember Lash',
+    art: '🕯',
     cost: 1,
     type: 'attack',
     rarity: 'common',
@@ -44,6 +47,7 @@ export const cards = [
   {
     id: 'ew_flamewhip',
     name: 'Flame Whip',
+    art: '🔥',
     cost: 2,
     type: 'attack',
     rarity: 'common',
@@ -89,6 +93,7 @@ export const cards = [
   {
     id: 'ew_hotblood',
     name: 'Hot-Blooded',
+    art: '🩸',
     cost: 1,
     type: 'power',
     rarity: 'common',
@@ -104,6 +109,7 @@ export const cards = [
   {
     id: 'ew_ignite',
     name: 'Ignite',
+    art: '🔥',
     cost: 1,
     type: 'skill',
     rarity: 'common',
@@ -135,6 +141,7 @@ export const cards = [
   {
     id: 'ew_adrenal_burn',
     name: 'Adrenal Burn',
+    art: '🔥',
     cost: 0,
     type: 'skill',
     rarity: 'uncommon',
@@ -162,6 +169,7 @@ export const cards = [
   {
     id: 'ew_pyreform',
     name: 'Pyreform',
+    art: '🔥',
     cost: 2,
     type: 'skill',
     rarity: 'uncommon',
@@ -174,6 +182,7 @@ export const cards = [
   {
     id: 'ew_burningrage',
     name: 'Burning Rage',
+    art: '🔥',
     cost: 1,
     type: 'power',
     rarity: 'uncommon',
@@ -201,6 +210,7 @@ export const cards = [
   {
     id: 'ew_emberstorm',
     name: 'Emberstorm',
+    art: '🕯',
     cost: 2,
     type: 'attack',
     rarity: 'uncommon',
@@ -214,6 +224,7 @@ export const cards = [
   {
     id: 'ew_pyroclasm',
     name: 'Pyroclasm',
+    art: '🌋',
     cost: 3,
     type: 'attack',
     rarity: 'rare',
@@ -229,6 +240,7 @@ export const cards = [
   {
     id: 'ew_burningsoul',
     name: 'Burning Soul',
+    art: '🔥',
     cost: 2,
     type: 'power',
     rarity: 'rare',
@@ -256,6 +268,7 @@ export const cards = [
   {
     id: 'ew_berserker',
     name: 'Berserker',
+    art: '😤',
     cost: 3,
     type: 'power',
     rarity: 'rare',
@@ -280,6 +293,7 @@ export const cards = [
   {
     id: 'ew_recklessfury',
     name: 'Reckless Fury',
+    art: '😤',
     cost: 0,
     type: 'skill',
     rarity: 'rare',
@@ -297,6 +311,7 @@ export const cards = [
   {
     id: 'ew_scorch',
     name: 'Scorch',
+    art: '☀',
     cost: 1,
     type: 'attack',
     rarity: 'common',
@@ -309,6 +324,7 @@ export const cards = [
   {
     id: 'ew_fireform',
     name: 'Fireform',
+    art: '🔥',
     cost: 2,
     type: 'power',
     rarity: 'uncommon',
@@ -321,6 +337,7 @@ export const cards = [
   {
     id: 'ew_burnout',
     name: 'Burnout',
+    art: '🔥',
     cost: 0,
     type: 'skill',
     rarity: 'uncommon',
@@ -345,6 +362,7 @@ export const cards = [
   {
     id: 'ew_spark',
     name: 'Spark',
+    art: '✨',
     cost: 0,
     type: 'attack',
     rarity: 'common',
