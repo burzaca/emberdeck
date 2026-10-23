@@ -25,7 +25,7 @@ export function createRun({ seed, classId }) {
     state: 'map',
     node: null,
     reward: null,
-    shop: null,
+    shop: null, seenEvents: [],
     event: null,
     restUsed: false,
     stats: { kills: 0, turns: 0, dmgDealt: 0, dmgTaken: 0, cardsPlayed: 0, startedAt: Date.now() },
@@ -76,11 +76,13 @@ export function encounterFor(run, nodeType) {
   }
   const normals = pool.filter(e => e.tier === 'normal');
   let count;
+  const safe = run.row < 2 ? normals.filter(e => (e.hp[0] ?? 99) <= 20) : normals;
+  const pool2 = safe.length ? safe : normals;
   if (run.row < 4) count = 1;
   else if (run.row < 8) count = run.rng.int(1, 2);
-  else count = run.rng.int(1, 3);
+  else count = run.rng.int(1, run.act >= 3 ? 3 : 2);
   const group = [];
-  for (let i = 0; i < count; i++) group.push(run.rng.pick(normals).id);
+  for (let i = 0; i < count; i++) group.push(run.rng.pick(pool2).id);
   return group;
 }
 
@@ -196,9 +198,13 @@ export function shopRemoveCard(run, uid) {
 
 // --- events ---
 export function pickEvent(run) {
-  const pool = DATA.events.filter(e => (e.act || []).includes(run.act));
-  if (!pool.length) return null;
-  return run.rng.weighted(pool.map(e => [e, e.weight || 1]));
+  const all = DATA.events.filter(e => (e.act || []).includes(run.act));
+  if (!all.length) return null;
+  const fresh = all.filter(e => !(run.seenEvents || []).includes(e.id));
+  const pool = fresh.length ? fresh : all;
+  const ev = run.rng.weighted(pool.map(e => [e, e.weight || 1]));
+  if (ev) { run.seenEvents = run.seenEvents || []; run.seenEvents.push(ev.id); }
+  return ev;
 }
 
 export function applyRunEffects(run, effects) {
@@ -258,7 +264,7 @@ export function serializeRun(run) {
   return {
     seed: run.seed, char: run.char.id, hp: run.hp, maxHp: run.maxHp, gold: run.gold,
     deck: run.deck, relics: run.relics, potions: run.potions,
-    act: run.act, map: run.map, row: run.row, col: run.col, state: run.state,
+    act: run.act, map: run.map, row: run.row, col: run.col, state: run.state, seenEvents: run.seenEvents || [],
     restUsed: run.restUsed, stats: run.stats, rngState: run.rng.getState(),
     finished: run.finished,
   };
@@ -268,7 +274,7 @@ export function deserializeRun(s) {
   const run = createRun({ seed: s.seed, classId: s.char });
   Object.assign(run, {
     hp: s.hp, maxHp: s.maxHp, gold: s.gold, deck: s.deck, relics: s.relics,
-    potions: s.potions, act: s.act, map: s.map, row: s.row, col: s.col,
+    potions: s.potions, act: s.act, map: s.map, row: s.row, col: s.col, seenEvents: s.seenEvents || [],
     state: s.state, restUsed: s.restUsed, stats: s.stats, finished: s.finished,
   });
   run.rng.setState(s.rngState);

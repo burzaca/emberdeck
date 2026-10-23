@@ -95,7 +95,7 @@ export const enemies = [
 // --- Act 2: Frost/Depth Theme ---
 // Normal
 {
-  id: 'e_frostling', name: 'Frostling', art: '❄️', hp: [32, 38], act: 2, tier: 'normal',
+  id: 'e_frostling', name: 'Frostling', art: '❄️', hp: [28, 33], act: 2, tier: 'normal',
   moves: [
     { id: 'icicle_shard', intent:'attack', dmg: 12, weight: 3 },
     { id: 'cold_skin', intent:'block', block: 11, weight: 2 },
@@ -115,7 +115,7 @@ export const enemies = [
 {
   id: 'e_frigid_owl', name: 'Frigid Owl', art: '🦉', hp: [30, 35], act: 2, tier: 'normal',
   moves: [
-    { id: 'polar_screech', intent:'attack', dmg: 10, hits:2, weight: 2 },
+    { id: 'polar_screech', intent:'attack', dmg: 9, hits:2, weight: 2 },
     { id: 'watchful_posture', intent:'block', block: 13, weight: 2 },
     { id: 'ominous_gaze', intent:'debuff', debuff: { buff:'frail', n:1 }, weight: 2 }
   ],
@@ -124,7 +124,7 @@ export const enemies = [
 {
   id: 'e_frozen_serf', name: 'Frozen Serf', art: '🥶', hp: [34, 41], act: 2, tier: 'normal',
   moves: [
-    { id: 'frost_club', intent:'attack', dmg: 17, weight: 2 },
+    { id: 'frost_club', intent:'attack', dmg: 13, weight: 2 },
     { id: 'grovel', intent:'block', block: 15, weight: 2 }
   ],
   flavor: 'A slavering brute caught forever in the frost.'
@@ -133,7 +133,7 @@ export const enemies = [
   id: 'e_rime_hag', name: 'Rime Hag', art: '🧙', hp: [33, 39], act: 2, tier: 'normal',
   moves: [
     { id: 'curse_breath', intent:'debuff', debuff: { buff:'poison', n:4 }, weight: 2 },
-    { id: 'frost_touch', intent:'attack_debuff', dmg: 12, debuff: { buff:'frail', n:1 }, weight: 2 },
+    { id: 'frost_touch', intent:'attack_debuff', dmg: 10, debuff: { buff:'frail', n:1 }, weight: 2 },
     { id: 'midwinter_chant', intent:'buff', buff: { buff:'strength', n:2 }, weight: 1 }
   ],
   flavor: 'Freezing curse-songs drift from its lips.'
@@ -141,7 +141,7 @@ export const enemies = [
 {
   id: 'e_ice_serpent', name: 'Ice Serpent', art: '🐍', hp: [36, 43], act: 2, tier: 'normal',
   moves: [
-    { id: 'snow_fang', intent:'attack', dmg: 14, weight: 3 },
+    { id: 'snow_fang', intent:'attack', dmg: 12, weight: 3 },
     { id: 'frosted_scales', intent:'block', block: 14, weight: 2 },
     { id: 'chill_aura', intent:'debuff', debuff: { buff:'frail', n:2 }, weight: 1 }
   ],
@@ -159,14 +159,14 @@ export const enemies = [
 {
   id: 'e_ice_wight', name: 'Ice Wight', art: '⚰️', hp: [37, 43], act: 2, tier: 'normal',
   moves: [
-    { id: 'void_chill', intent:'attack', dmg: 16, weight: 2 },
+    { id: 'void_chill', intent:'attack', dmg: 13, weight: 2 },
     { id: 'dissipate', intent:'block', block: 16, weight: 1 }
   ],
   flavor: 'Shrouded in rags of frostbitten dusk.'
 },
 // Elites
 {
-  id: 'e_frost_guardian', name: 'Frost Guardian', art: '🛡️', hp: [59, 65], act: 2, tier: 'elite',
+  id: 'e_frost_guardian', name: 'Frost Guardian', art: '🛡️', hp: [52, 58], act: 2, tier: 'elite',
   moves: [
     { id: 'icy_blast', intent:'attack', dmg: 18, weight: 2 },
     { id: 'eternal_defense', intent:'block', block: 26, weight: 2 },
@@ -176,7 +176,7 @@ export const enemies = [
   flavor: 'A sentry locked in ancient ice, unmoved by mercy.'
 },
 {
-  id: 'e_depths_alpha', name: 'Depths Alpha', art: '🐺', hp: [54, 60], act: 2, tier: 'elite',
+  id: 'e_depths_alpha', name: 'Depths Alpha', art: '🐺', hp: [48, 54], act: 2, tier: 'elite',
   moves: [
     { id: 'ravage_leap', intent:'attack', dmg: 16, hits:2, weight: 2 },
     { id: 'glacial_cunning', intent:'strength_up', n: 2, weight: 2 },
@@ -278,7 +278,7 @@ export const enemies = [
 // --- Bosses (9 total)—IDs: b1_a/b1_b/b1_c (Act 1), b2_a/b2_b/b2_c (Act 2), b3_a/b3_b/b3_c (Act 3)
 // Act 1 Bosses
 {
-  id: 'b1_a', name: 'Ashen Revenant', art: '👺', hp: [100, 105], act: 1, tier: 'boss',
+  id: 'b1_a', name: 'Ashen Revenant', art: '👺', hp: [80, 88], act: 1, tier: 'boss',
   moves: [
     { id: 'spectral_blaze', intent:'attack', dmg: 12, hits: 2, weight: 2 },
     { id: 'curse_brand', intent:'debuff', debuff: { buff:'frail', n:2 }, weight: 1 },
@@ -290,7 +290,7 @@ export const enemies = [
   flavor: 'Once a hero. Now only fire, ash and fury.'
 },
 {
-  id: 'b1_b', name: 'Cinder Colossus', art: '🌋', hp: [105, 110], act: 1, tier: 'boss',
+  id: 'b1_b', name: 'Cinder Colossus', art: '🌋', hp: [84, 92], act: 1, tier: 'boss',
   moves: [
     { id: 'crush', intent:'attack', dmg: 22, weight: 3 },
     { id: 'ember_quake', intent:'attack_debuff', dmg: 11, debuff: { buff:'poison', n:4 }, weight: 1 },
@@ -300,7 +300,7 @@ export const enemies = [
   flavor: 'Each step cracks the world a little further.'
 },
 {
-  id: 'b1_c', name: 'The Fivefold Flame', art: '🔥', hp: [95, 100], act: 1, tier: 'boss',
+  id: 'b1_c', name: 'Fivefold Flame', art: '🔥', hp: [78, 86], act: 1, tier: 'boss',
   moves: [
     { id: 'split_burst', intent:'attack', dmg: 8, hits: 3, weight: 2 },
     { id: 'triumphant_chant', intent:'buff', buff: { buff:'strength', n:2 }, weight: 1 },
@@ -313,7 +313,7 @@ export const enemies = [
 },
 // Act 2 Bosses
 {
-  id: 'b2_a', name: 'Winter Sovereign', art: '☃️', hp: [180, 185], act: 2, tier: 'boss',
+  id: 'b2_a', name: 'Winter Sovereign', art: '☃️', hp: [155, 165], act: 2, tier: 'boss',
   moves: [
     { id: 'frostlash', intent:'attack', dmg: 18, hits: 2, weight: 2 },
     { id: 'glacial_blessing', intent:'block', block: 30, weight: 1 },
@@ -325,7 +325,7 @@ export const enemies = [
   flavor: 'The cold has a will, and now a throne.'
 },
 {
-  id: 'b2_b', name: 'Fathom Host', art: '🌊', hp: [170, 175], act: 2, tier: 'boss',
+  id: 'b2_b', name: 'Fathom Host', art: '🌊', hp: [150, 158], act: 2, tier: 'boss',
   moves: [
     { id: 'wave_crush', intent:'attack_debuff', dmg: 20, debuff: { buff:'poison', n: 6 }, weight: 1 },
     { id: 'maelstrom', intent:'attack', dmg: 18, hits: 2, weight: 2 },
@@ -336,7 +336,7 @@ export const enemies = [
   flavor: 'The abyss itself adopted a host.'
 },
 {
-  id: 'b2_c', name: 'Icebound Saint', art: '😇', hp: [185, 190], act: 2, tier: 'boss',
+  id: 'b2_c', name: 'Icebound Saint', art: '😇', hp: [158, 168], act: 2, tier: 'boss',
   moves: [
     { id: 'rime_purge', intent:'attack', dmg: 24, weight: 2 },
     { id: 'glorious_frost', intent:'block', block: 34, weight: 1 },
@@ -349,35 +349,35 @@ export const enemies = [
 },
 // Act 3 Bosses
 {
-  id: 'b3_a', name: 'Null Monarch', art: '🕳️', hp: [275, 285], act: 3, tier: 'boss',
+  id: 'b3_a', name: 'Null Monarch', art: '🕳️', hp: [215, 230], act: 3, tier: 'boss',
   moves: [
-    { id: 'obliviating_ray', intent:'attack', dmg: 24, hits:2, weight: 2 },
+    { id: 'obliviating_ray', intent:'attack', dmg: 18, hits:2, weight: 2 },
     { id: 'singularity', intent:'attack_debuff', dmg: 18, debuff: { buff:'vulnerable', n:2 }, weight: 1 },
-    { id: 'void_reign', intent:'strength_up', n: 6, weight: 2 },
-    { id: 'nihility_wave', intent:'block', block: 55, weight: 1 }
+    { id: 'void_reign', intent:'strength_up', n: 4, weight: 2 },
+    { id: 'nihility_wave', intent:'block', block: 40, weight: 1 }
   ],
   opener: 'obliviating_ray',
   no_repeat: true,
   flavor: 'The idea of a king, no longer bound to flesh.'
 },
 {
-  id: 'b3_b', name: 'Desolate Lord', art: '💀', hp: [260, 270], act: 3, tier: 'boss',
+  id: 'b3_b', name: 'Desolate Lord', art: '💀', hp: [205, 218], act: 3, tier: 'boss',
   moves: [
-    { id: 'ruin_cleave', intent:'attack', dmg: 35, weight: 2 },
-    { id: 'hollowing', intent:'attack_debuff', dmg: 15, debuff: { buff:'poison', n:10 }, weight: 1 },
-    { id: 'endless_dread', intent:'ritual', n: 6, weight: 2 },
-    { id: 'final_command', intent:'buff', buff: { buff:'strength', n: 5 }, weight: 1 }
+    { id: 'ruin_cleave', intent:'attack', dmg: 26, weight: 2 },
+    { id: 'hollowing', intent:'attack_debuff', dmg: 13, debuff: { buff:'poison', n:8 }, weight: 1 },
+    { id: 'endless_dread', intent:'ritual', n: 3, weight: 2 },
+    { id: 'final_command', intent:'buff', buff: { buff:'strength', n: 3 }, weight: 1 }
   ],
   no_repeat: true,
   flavor: 'Despair wears a face for you alone.'
 },
 {
-  id: 'b3_c', name: 'The Sundered Choir', art: '🎭', hp: [250, 260], act: 3, tier: 'boss',
+  id: 'b3_c', name: 'The Sundered Choir', art: '🎭', hp: [195, 208], act: 3, tier: 'boss',
   moves: [
-    { id: 'choral_wrath', intent:'attack', dmg: 22, hits: 3, weight: 2 },
+    { id: 'choral_wrath', intent:'attack', dmg: 14, hits: 3, weight: 2 },
     { id: 'discord', intent:'debuff', debuff: { buff:'frail', n:3 }, weight: 1 },
-    { id: 'inevitable_finale', intent:'block', block: 60, weight: 1 },
-    { id: 'last_song', intent:'ritual', n: 6, weight: 2 }
+    { id: 'inevitable_finale', intent:'block', block: 45, weight: 1 },
+    { id: 'last_song', intent:'ritual', n: 3, weight: 2 }
   ],
   opener: 'choral_wrath',
   no_repeat: true,

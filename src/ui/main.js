@@ -198,6 +198,8 @@ function renderPotionsBar(targetEl) {
       if (G.combat) {
         usePotion(G.combat, pid);
         G.run.potions = G.run.potions.filter(x => x !== pid);
+        G.run.hp = Math.max(0, G.combat.player.hp);
+        updateTopbar();
         renderCombat();
       } else {
         applyRunEffects(G.run, p.effects);
