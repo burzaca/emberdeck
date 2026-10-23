@@ -9,6 +9,7 @@ import {
 } from '../engine/run.js';
 import {
   startCombat, playCard, endTurn, canPlay, liveCard, usePotion, enemyIntents, makeInstance,
+  serializeCombat, deserializeCombat,
 } from '../engine/combat.js';
 import { BUFF_INFO } from '../engine/effects.js';
 import { el, $id, show, toast, initTooltips, modal, closeModal, esc } from './dom.js';
@@ -50,6 +51,14 @@ window.addEventListener('DOMContentLoaded', () => {
     $id('btn-continue').addEventListener('click', () => {
       G.run = deserializeRun(saved);
       document.body.dataset.char = G.run.char.id;
+      if (saved.combat) {
+        try {
+          G.combat = deserializeCombat(saved.combat, G.run);
+          show('screen-combat');
+          renderCombat();
+          return;
+        } catch { G.combat = null; }
+      }
       showMap();
     });
   }
@@ -67,8 +76,13 @@ function loadSave() {
   catch { return null; }
 }
 function saveGame() {
+  // note: combat is appended by callers that have one; see afterAction
   if (!G.run || G.combat) return;
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify(serializeRun(G.run))); } catch {}
+  try {
+    const blob = serializeRun(G.run);
+    blob.combat = serializeCombat(G.combat);
+    localStorage.setItem(SAVE_KEY, JSON.stringify(blob));
+  } catch {}
 }
 function clearSave() { try { localStorage.removeItem(SAVE_KEY); } catch {} }
 
@@ -417,6 +431,7 @@ function afterAction() {
   const C = G.combat;
   if (C.over === 'win') { winCombat(); return; }
   if (C.over === 'loss') { loseCombat(); return; }
+  saveGame();
   renderCombat();
 }
 
@@ -471,6 +486,7 @@ function winCombat() {
   takeRewardGold(G.run, G.reward);
   G.run.stats.kills += C.enemies.length;
   G.combat = null;
+  saveGame();
   showReward();
 }
 

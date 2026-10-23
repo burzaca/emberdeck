@@ -7,6 +7,41 @@ import {
 
 let UID = 1;
 export function resetUid() { UID = 1; }
+export function bumpUid(n) { if (n > UID) UID = n; }
+
+// --- combat save/restore (plain JSON; run must be deserialized first) ---
+export function serializeCombat(C) {
+  if (!C || C.over) return null;
+  return {
+    player: {
+      hp: C.player.hp, maxHp: C.player.maxHp, block: C.player.block, buffs: C.player.buffs,
+      energy: C.player.energy, hand: C.player.hand, drawPile: C.player.drawPile,
+      discard: C.player.discard, exhaust: C.player.exhaust,
+    },
+    enemies: C.enemies.map(e => ({
+      id: e.id, defId: e.defId, hp: e.hp, maxHp: e.maxHp, block: e.block, buffs: e.buffs,
+      alive: e.alive, hasActed: !!e.hasActed, lastMove: e.lastMove, nextMoveId: e.nextMove?.id || null,
+    })),
+    turn: C.turn, baseEnergy: C.baseEnergy, drawPerTurn: C.drawPerTurn,
+  };
+}
+
+export function deserializeCombat(s, run) {
+  const C = {
+    rng: run.rng, run,
+    player: { id: 'player', name: run.char.name, side: 'player', alive: s.player.hp > 0, ...s.player },
+    enemies: s.enemies.map(se => {
+      const def = DATA.enemyById.get(se.defId);
+      return { ...se, name: def.name, side: 'enemy', data: def,
+        nextMove: def.moves.find(m => m.id === se.nextMoveId) || null };
+    }),
+    turn: s.turn, phase: 'player', log: [], doubleNextBlock: false, triggered: {},
+    baseEnergy: s.baseEnergy, drawPerTurn: s.drawPerTurn, over: null,
+  };
+  const maxUid = Math.max(0, ...[C.player.hand, C.player.drawPile, C.player.discard].flat().map(i => i.uid || 0));
+  bumpUid(maxUid + 1);
+  return C;
+}
 
 export function makeInstance(cardId, upgraded = false) {
   return { uid: UID++, id: cardId, upgraded };

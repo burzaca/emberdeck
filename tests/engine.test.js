@@ -4,10 +4,55 @@ import { makeRng, hashSeed, dailySeed } from '../src/engine/rng.js';
 import { DATA, validateData } from '../src/engine/registry.js';
 import { generateMap } from '../src/engine/map.js';
 import { createRun, serializeRun, deserializeRun, rollCardReward, deckCount, reachable, enterNode, encounterFor } from '../src/engine/run.js';
-import { startCombat, playCard, endTurn, liveCard, makeInstance } from '../src/engine/combat.js';
+import { startCombat, playCard, endTurn, liveCard, makeInstance, serializeCombat, deserializeCombat } from '../src/engine/combat.js';
 import { dealDamage, gainBlock, addBuff, attackDamage, resolveNum } from '../src/engine/effects.js';
 
 // ---------- rng ----------
+
+// ---------- combat save/restore ----------
+test('combat survives serialize/deserialize round-trip', () => {
+  const run = createRun({ seed: 'save-combat-1', classId: 'emberwright' });
+  const C = startCombat(run, encounterFor(run, 'combat'));
+  // play one card so state is non-pristine
+  const inst = C.player.hand.find(i => liveCard(i).cost <= C.player.energy);
+  if (inst) playCard(C, inst.uid, 0);
+  const blob = JSON.parse(JSON.stringify(serializeCombat(C)));
+  const C2 = deserializeCombat(blob, run);
+  assert.equal(C2.enemies.length, C.enemies.length);
+  assert.equal(C2.player.hand.length, C.player.hand.length);
+  assert.equal(C2.player.energy, C.player.energy);
+  assert.equal(C2.turn, C.turn);
+  C.enemies.forEach((e, i) => {
+    assert.equal(C2.enemies[i].hp, e.hp);
+    assert.equal(C2.enemies[i].block, e.block);
+    assert.deepEqual(C2.enemies[i].buffs, e.buffs);
+    if (e.nextMove) assert.equal(C2.enemies[i].nextMove.id, e.nextMove.id);
+  });
+  // restored combat must still be playable
+  const playable = C2.player.hand.find(i => liveCard(i).cost <= C2.player.energy);
+  if (playable) {
+    const res = playCard(C2, playable.uid, 0);
+    assert.ok(res.ok);
+  }
+  // finished combat must not serialize
+  const run2 = createRun({ seed: 'save-combat-2', classId: 'emberwright' });
+  const C3 = startCombat(run2, encounterFor(run2, 'combat'));
+  let guard = 0;
+  while (!C3.over && guard++ < 100) {
+    let played = true;
+    while (played && !C3.over) {
+      played = false;
+      for (const i of C3.player.hand) {
+        const res = playCard(C3, i.uid, 0);
+        if (res.ok) { played = true; break; }
+      }
+    }
+    if (!C3.over) endTurn(C3);
+  }
+  assert.ok(C3.over);
+  assert.equal(serializeCombat(C3), null);
+});
+
 test('rng is deterministic per seed', () => {
   const a = makeRng('seed-1'), b = makeRng('seed-1');
   for (let i = 0; i < 50; i++) assert.equal(a.next(), b.next());
