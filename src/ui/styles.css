@@ -286,6 +286,19 @@ button { font-family: inherit; cursor: pointer; }
 .end-stats div { display: flex; justify-content: space-between; gap: 24px; }
 .end-stats span { color: var(--ink-dim); }
 
+/* floating combat numbers */
+.floater {
+  position: absolute; left: 50%; top: 30%;
+  transform: translateX(-50%);
+  font-size: 22px; font-weight: 900; pointer-events: none; z-index: 40;
+  text-shadow: 0 2px 6px #000;
+  animation: floatup .95s ease-out forwards;
+}
+.float-dmg { color: #ff6a4a; }
+.float-heal { color: #6fbf6a; }
+.float-block { color: #7ec0ee; font-size: 16px; }
+@keyframes floatup { to { transform: translate(-50%, -46px); opacity: 0; } }
+
 /* ---------- modal / toast / tooltip ---------- */
 .modal { position: fixed; inset: 0; background: rgba(5,3,2,.75); z-index: 100; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(3px); }
 .modal-body {

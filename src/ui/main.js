@@ -20,6 +20,7 @@ const G = { run: null, combat: null, selectedUid: null, reward: null, takenCards
 window.__emberdeck = G; // debug/test hook
 window.__forceShop = () => { if (G.run) { G.run.shop = generateShop(G.run); showShop(); } };
 window.__forceRest = () => { if (G.run) showRest(); };
+window.__forceEnd = (win) => { if (G.run) { G.run.finished = win ? 'victory' : 'death'; showEnd(); } };
 
 // ---------- boot ----------
 window.addEventListener('DOMContentLoaded', () => {
@@ -31,6 +32,11 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(b);
   }
   $id('btn-newrun').addEventListener('click', () => show('screen-class'));
+  $id('btn-daily').addEventListener('click', () => {
+    $id('seed-input').value = dailySeed();
+    toast(`Today's seed: ${dailySeed()} — same map for everyone today.`);
+    show('screen-class');
+  });
   $id('btn-howto').addEventListener('click', showHowTo);
   $id('btn-menu').addEventListener('click', showMenu);
   $id('modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
@@ -110,7 +116,7 @@ function showMap() {
   const svg = $id('map-svg');
   nodesEl.innerHTML = '';
   svg.innerHTML = '';
-  const ROWH = 92, PAD = 46;
+  const ROWH = 78, PAD = 40;
   const H = 15 * ROWH + PAD * 2;
   const W = Math.max(360, wrap.clientWidth);
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -337,10 +343,28 @@ function onCardClick(inst, card) {
     G.selectedUid = G.selectedUid === inst.uid ? null : inst.uid;
     renderCombat();
   } else {
+    const logMark = C.log.length;
     const r = playCard(C, inst.uid);
-    if (r.ok) sfx.card();
+    if (r.ok) { sfx.card(); showFloaters(C, logMark); }
     afterAction();
   }
+}
+
+// Floating damage/heal numbers over the targets of the last action.
+function showFloaters(C, sinceIdx) {
+  for (const e of C.log.slice(sinceIdx)) {
+    if (e.t === 'damage' && e.from === 'player' && e.lost > 0) floatOver(`[data-idx="${C.enemies.findIndex(x => x.id === e.to)}"]`, `-${e.lost}`, 'float-dmg');
+    if (e.t === 'self_damage') floatOver('#player-avatar', `-${e.n}`, 'float-dmg');
+    if (e.t === 'heal' && e.n > 0) floatOver('#player-avatar', `+${e.n}`, 'float-heal');
+    if (e.t === 'block') floatOver('#player-avatar', `🛡${e.amount}`, 'float-block');
+  }
+}
+function floatOver(sel, text, cls) {
+  const host = document.querySelector(sel);
+  if (!host) return;
+  const f = el('div', `floater ${cls}`, text);
+  host.append(f);
+  setTimeout(() => f.remove(), 950);
 }
 
 function onEnemyClick(idx) {
@@ -348,8 +372,9 @@ function onEnemyClick(idx) {
   if (!G.selectedUid) return;
   const inst = C.player.hand.find(i => i.uid === G.selectedUid);
   if (!inst) return;
+  const logMark = C.log.length;
   const r = playCard(C, inst.uid, idx);
-  if (r.ok) sfx.card();
+  if (r.ok) { sfx.card(); showFloaters(C, logMark); }
   G.selectedUid = null;
   afterAction();
 }
@@ -362,6 +387,34 @@ function afterAction() {
 }
 
 $id('btn-endturn')?.addEventListener('click', () => {});
+document.addEventListener('keydown', (e) => {
+  if (!G.combat || G.combat.over) return;
+  if (!$id('screen-combat').classList.contains('hidden') === false) return;
+  if (e.key === 'e' || e.key === 'E' || e.key === 'Enter') {
+    G.selectedUid = null;
+    endTurn(G.combat);
+    G.run.stats.turns++;
+    afterAction();
+  } else if (/^[1-9]$/.test(e.key)) {
+    const inst = G.combat.player.hand[parseInt(e.key) - 1];
+    if (!inst) return;
+    const chk = canPlay(G.combat, inst);
+    if (!chk.ok) return;
+    if (chk.card.target === 'enemy') {
+      const alive = G.combat.enemies.findIndex(x => x.alive);
+      const logMark = G.combat.log.length;
+      const r = playCard(G.combat, inst.uid, alive);
+      if (r.ok) { sfx.card(); showFloaters(G.combat, logMark); }
+      afterAction();
+    } else {
+      const logMark = G.combat.log.length;
+      const r = playCard(G.combat, inst.uid);
+      if (r.ok) { sfx.card(); showFloaters(G.combat, logMark); }
+      afterAction();
+    }
+  }
+});
+
 document.addEventListener('click', (e) => {
   if (e.target.id === 'btn-endturn' && G.combat && !G.combat.over) {
     G.selectedUid = null;
@@ -636,7 +689,7 @@ function showEnd() {
   if (win) clearSave();
   const body = $id('end-body');
   body.innerHTML = '';
-  body.append(el('h2', win ? 'end-win' : 'end-death', win ? 'THE SPAIRE IS YOURS' : 'YOU FELL'));
+  body.append(el('h2', win ? 'end-win' : 'end-death', win ? 'THE SPIRE IS YOURS' : 'YOU FELL'));
   body.append(el('p', 'end-sub', win
     ? 'The last lord of the Emberdeck falls. Dawn finds you at the top.'
     : 'The dark keeps your cards. The mountain forgets nothing.'));

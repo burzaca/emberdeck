@@ -50,6 +50,8 @@ empty for a random one, or type a word for a deterministic map.
 - Click a node on the map to travel (only glowing nodes are reachable).
 - Click an attack card → click a target. Skills/Powers play on click.
 - `END TURN` passes to the enemy phase. Draw/discard piles are clickable.
+- Keyboard: `1-9` play the matching card, `E` / `Enter` ends the turn.
+- **Daily Run** — everyone gets the same map that day. Beat your friends.
 - Works with touch. Portrait and landscape.
 
 ## Run it locally
