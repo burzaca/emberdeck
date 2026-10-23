@@ -328,7 +328,9 @@ body[data-char=gravewarden] .avatar-core::before { content: '💀'; }
 /* ---------- responsive ---------- */
 @media (max-width: 760px) {
   .card { width: 118px; height: 172px; }
+  .card:has(.card-up) { height: 200px; }
   .card-text { font-size: 10.5px; }
+  .card-up { font-size: 9.5px; margin-top: 2px; }
   .card-art { height: 44px; font-size: 22px; }
   .hand { height: 190px; }
   .player-side { margin-bottom: 160px; }
