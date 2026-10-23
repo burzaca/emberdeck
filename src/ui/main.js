@@ -335,6 +335,7 @@ function renderCombat() {
     const n = cardNode(card, {
       selected: G.selectedUid === inst.uid,
       disabled: !playable,
+      hideUp: true,
       onClick: () => onCardClick(inst, card),
     });
     // drag-to-play: press a card, release over a target to play it

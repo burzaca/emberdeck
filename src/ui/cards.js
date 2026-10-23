@@ -25,6 +25,12 @@ export function cardNode(card, opts = {}) {
   const text = el('div', 'card-text');
   text.innerHTML = renderText(card).replace(/\n/g, '<br>');
   n.append(cost, name, art, text);
+  const hasUp = card.up && Object.values(card.up).some(v => v > 0) && !card._upgraded && card.upgradeable !== false;
+  if (hasUp && !opts.small && !opts.hideUp) {
+    const upLine = el('div', 'card-up');
+    upLine.innerHTML = `▲ ${renderText({ ...card, _upgraded: true }).replace(/\n/g, '<br>')}`;
+    n.append(upLine);
+  }
   const kw = (card.keywords || []).filter(k => k !== 'unplayable');
   const extra = [];
   if (card.exhaust) extra.push('exhaust');
