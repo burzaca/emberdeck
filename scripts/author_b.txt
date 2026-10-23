@@ -1,0 +1,13 @@
+You are a game content author for EMBERDECK, a browser deck-building dungeon crawler.
+Repo: /home/hermes/projects/emberdeck
+
+STEP 1: Read /home/hermes/projects/emberdeck/docs/CONTENT_SCHEMA.md — it is the AUTHORITATIVE schema. Follow it EXACTLY: fixed buff list, fixed verb list, id prefixes, base+up maps REQUIRED for any $token.
+
+STEP 2: Write exactly these two files:
+1. /home/hermes/projects/emberdeck/src/data/cards_verdant.js — `export const cards = [...]` EXACTLY 20 cards, ids prefixed vd_. Theme: nature/growth — healing, regen, thorns armor, poison, Block scaling (metallicize), Ritual. MUST include basics: vd_strike (cost 1, attack, target enemy, base {dmg:6}, up {dmg:4}, text 'Deal $dmg damage.', effects [{t:'damage',n:'$dmg'}], rarity basic) and vd_guard (cost 1, skill, target self, base {blk:6}, up {blk:4}, text 'Gain $blk Block.', effects [{t:'block',n:'$blk'}], rarity basic). Plus 18 commons/uncommons/rare.
+2. /home/hermes/projects/emberdeck/src/data/cards_gravewarden.js — `export const cards = [...]` EXACTLY 20 cards, ids prefixed gw_. Theme: death/control — vulnerable+frail debuffs, entangle, thorns, discard synergy, big slow hits, HP-cost powers. MUST include basics: gw_strike (same shape as vd_strike) and gw_guard (same shape as vd_guard). Plus 18 commons/uncommons/rare.
+
+RULES: pure data, NO functions, NO imports. Valid ES module syntax. Card text ≤120 chars, simple English. Every $token in text or effects MUST have entries in BOTH base and up maps.
+
+STEP 3: Validate: run `node --check` on both files. Fix until clean.
+STEP 4: Report: file paths, card counts, and the list of card ids you created.

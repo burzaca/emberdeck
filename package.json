@@ -1,0 +1,13 @@
+{
+  "name": "emberdeck",
+  "version": "1.0.0",
+  "description": "EMBERDECK — a deck-building dungeon crawler that runs in your browser. No build step, no dependencies.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/",
+    "sim": "node scripts/simulate.js",
+    "serve": "python3 -m http.server 8080"
+  },
+  "license": "MIT",
+  "engines": { "node": ">=20" }
+}

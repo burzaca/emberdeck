@@ -1,0 +1,15 @@
+You are a game content author for EMBERDECK, a browser deck-building dungeon crawler.
+Repo: /home/hermes/projects/emberdeck
+
+STEP 1: Read /home/hermes/projects/emberdeck/docs/CONTENT_SCHEMA.md — AUTHORITATIVE schema. Follow EXACTLY: relic hooks ONLY combat_start|turn_start|turn_end|card_played|enemy_died|combat_end|rest|map_move|damaged; event verbs include upgrade_random, remove_card, gain_relic, gain_gold, lose_gold, heal, gain_potion, add_card; buffs only from the fixed list.
+
+STEP 2: Write exactly these four files:
+1. /home/hermes/projects/emberdeck/src/data/relics.js — `export const relics = [...]` EXACTLY 27 relics: 3 starter (ids r_kindling, r_rootbound, r_lastbreath — rarity 'common' PLUS field starter:true; small effects, e.g. r_kindling combat_start gain 1 Strength... keep starters modest: r_kindling: first combat each... just combat_start +1 block per... keep simple: r_kindling {combat_start:[{t:'block',n:3}]}, r_rootbound {combat_start:[{t:'buff',target:'self',buff:'regen',n:1}]}, r_lastbreath {combat_start:[{t:'buff',target:'self',buff:'thorns',n:1}]}), 8 common, 6 uncommon, 4 rare, 4 boss (rarity 'boss', powerful, use limit field), 2 shop (rarity 'shop').
+2. /home/hermes/projects/emberdeck/src/data/potions.js — `export const potions = [...]` EXACTLY 10 potions: 7 combat_only:true, 3 utility (combat_only:false).
+3. /home/hermes/projects/emberdeck/src/data/events.js — `export const events = [...]` EXACTLY 10 events: 3 with act:[1], 4 with act:[1,2] or [2], 3 with act:[2,3] or [3]. Each 2-3 options, ALWAYS one option labeled 'Leave' with effects []. Meaningful tradeoffs (risk HP/gold for relics/upgrades/curses).
+4. /home/hermes/projects/emberdeck/src/data/classes.js — `export const classes = [...]` EXACTLY 3: emberwright (hp 70, card_pool_prefix 'ew_', starting_relic 'r_kindling', starting_deck: 5x ew_strike, 4x ew_guard, 1x ew_spark), verdant (hp 75, 'vd_', 'r_rootbound', 5x vd_strike, 4x vd_guard, 1x vd_bloom), gravewarden (hp 65, 'gw_', 'r_lastbreath', 5x gw_strike, 4x gw_guard, 1x gw_grasp). Write blurbs (one evocative sentence each). NOTE: ew_spark, vd_bloom, gw_grasp are authored by another agent — just reference these exact ids.
+
+RULES: pure data, NO functions, NO imports. Valid ES module syntax. English text ≤120 chars.
+
+STEP 3: Validate: `node --check` each of the four files. Fix until clean.
+STEP 4: Report counts and all ids.

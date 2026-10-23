@@ -1,0 +1,16 @@
+You are a game content author for EMBERDECK, a browser deck-building dungeon crawler.
+Repo: /home/hermes/projects/emberdeck
+
+STEP 1: Read /home/hermes/projects/emberdeck/docs/CONTENT_SCHEMA.md — AUTHORITATIVE schema. Follow EXACTLY: hp as [min,max], move intents ONLY attack|block|debuff|buff|attack_debuff|strength_up, every move needs numeric weight, buffs only from the fixed list.
+
+STEP 2: Write exactly ONE file: /home/hermes/projects/emberdeck/src/data/enemies.js — `export const enemies = [...]` containing:
+- Act 1: 8 normal (act:1, tier:'normal') + 2 elites (tier:'elite')
+- Act 2: 8 normal + 2 elites (act:2)
+- Act 3: 8 normal + 2 elites (act:3)
+- 9 bosses (tier:'boss'): ids b1_a,b1_b,b1_c (act:1), b2_a,b2_b,b2_c (act:2), b3_a,b3_b,b3_c (act:3). Bosses: 3-4 moves each, at least one uses ritual or strength_up scaling, no_repeat:true.
+Balance: normal HP act1 15-35, act2 30-55, act3 45-80; elites ~1.8x; boss HP act1 120-140, act2 200-230, act3 300-340. Attack dmg per hit: act1 6-12, act2 10-18, act3 14-24. Multi-hit moves use hits:2. Give every enemy a one-sentence flavor. Use opener where thematic. Themed names: act1 cinder/ruin theme, act2 frost/depth theme, act3 void/doom theme.
+
+RULES: pure data, NO functions, NO imports. Valid ES module syntax.
+
+STEP 3: Validate: `node --check /home/hermes/projects/emberdeck/src/data/enemies.js`. Fix until clean.
+STEP 4: Report: enemy count by act/tier and all ids.

@@ -1,0 +1,13 @@
+You are a game content author for EMBERDECK, a browser deck-building dungeon crawler.
+Repo: /home/hermes/projects/emberdeck
+
+STEP 1: Read /home/hermes/projects/emberdeck/docs/CONTENT_SCHEMA.md — it is the AUTHORITATIVE schema. Follow it EXACTLY: fixed buff list, fixed verb list, id prefixes, base+up maps REQUIRED for any $token.
+
+STEP 2: Write exactly these two files:
+1. /home/hermes/projects/emberdeck/src/data/cards_emberwright.js — `export const cards = [...]` with EXACTLY 20 cards, ids prefixed ew_. Theme: fire/aggro — big attacks, self-damage costs, poison burns, cheap finishers, Strength powers. MUST include basics: ew_strike (cost 1, attack, target enemy, base {dmg:6}, up {dmg:4}, text 'Deal $dmg damage.', effects [{t:'damage',n:'$dmg'}], rarity basic) and ew_guard (cost 1, skill, target self, base {blk:6}, up {blk:4}, text 'Gain $blk Block.', effects [{t:'block',n:'$blk'}], rarity basic). The other 18: commons/uncommons/rare with real tradeoffs.
+2. /home/hermes/projects/emberdeck/src/data/cards_colorless.js — `export const cards = [...]` with EXACTLY 12 cards, ids prefixed c_. Utility mix: block, draw, weak attacks, one curse c_curse_bind (cost 0, type skill, target none, unplayable true, keywords ['unplayable'], effects [], text 'Unplayable.'), one status card c_stone (cost 1, attack, target enemy, base {dmg:0}, effects [{t:'damage',n:'$dmg'}], text 'Deal $dmg damage.' — a deliberately weak filler), plus 10 interesting colorless commons/uncommons/rare.
+
+RULES: pure data, NO functions, NO imports. Valid ES module syntax. Card text ≤120 chars, simple English. Every $token in text or effects MUST have entries in BOTH base and up maps.
+
+STEP 3: Validate: run `node --check` on both files. Fix until clean.
+STEP 4: Report: file paths, card counts, and the list of card ids you created.
