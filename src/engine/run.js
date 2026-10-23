@@ -223,7 +223,13 @@ export function applyRunEffects(run, effects) {
         if (pool.length) addRelic(run, run.rng.pick(pool).id);
         break;
       }
-      case 'gain_potion': {
+      case 'gain_card': {
+      const prefix = run.char.card_pool_prefix;
+      const pool = DATA.cards.filter(c => (c.id.startsWith(prefix) || c.id.startsWith('c_')) && c.rarity === (v.rarity || 'common') && !['basic','curse','status'].includes(c.rarity));
+      if (pool.length) { const card = run.rng.pick(pool); run.deck.push(makeInstance(card.id, false)); results.push({ t: 'gain_card', card: card.id }); }
+      break;
+    }
+    case 'gain_potion': {
         if (run.potions.length < 3) addPotion(run, run.rng.pick(DATA.potions).id);
         break;
       }

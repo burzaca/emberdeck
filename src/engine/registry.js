@@ -11,7 +11,7 @@ import { classes } from '../data/classes.js';
 
 export const VALID_BUFFS = new Set(['strength','dexterity','vulnerable','frail','poison','regen','thorns','ritual','metallicize','entangle','wrath','shield']);
 export const VALID_VERBS = new Set(['damage','block','buff','draw','discard_all','heal','self_damage','gold','add_card','exhaust_hand','lose_block','energy','hp_loss_pct','double_next_block','vuln_all','none']);
-export const VALID_RUN_VERBS = new Set(['upgrade_random','remove_card','gain_relic','gain_gold','lose_gold','gain_potion']);
+export const VALID_RUN_VERBS = new Set(['upgrade_random','remove_card','gain_relic','gain_gold','lose_gold','gain_potion','gain_card']);
 export const VALID_INTENTS = new Set(['attack','block','debuff','buff','attack_debuff','strength_up','ritual']);
 export const VALID_HOOKS = new Set(['combat_start','turn_start','turn_end','card_played','enemy_died','combat_end','rest','map_move','damaged']);
 export const VALID_TYPES = new Set(['attack','skill','power']);
