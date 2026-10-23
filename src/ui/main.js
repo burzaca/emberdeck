@@ -49,10 +49,17 @@ window.addEventListener('DOMContentLoaded', () => {
     $id('btn-continue').classList.remove('hidden');
     $id('btn-continue').addEventListener('click', () => {
       G.run = deserializeRun(saved);
+      document.body.dataset.char = G.run.char.id;
       showMap();
     });
   }
   buildClassCards();
+  try {
+    const best = JSON.parse(localStorage.getItem(SAVE_KEY + '.best') || 'null');
+    if (best) $id('best-line').textContent = best.win
+      ? `best run: VICTORY (${best.when}) — seed ${best.seed}`
+      : `best run: Act ${best.act} (${best.when})`;
+  } catch {}
 });
 
 function loadSave() {
@@ -85,6 +92,7 @@ function startRun(classId) {
   const raw = $id('seed-input').value.trim();
   const seed = raw || `e-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e6)}`;
   G.run = createRun({ seed, classId });
+  document.body.dataset.char = classId;
   G.combat = null;
   clearSave();
   toast(`Run seed: ${seed}`);
@@ -113,6 +121,11 @@ function showMap() {
   const r = G.run;
   show('screen-map');
   $id('map-act-title').textContent = `Act ${r.act}`;
+  if (window.__lastAct !== r.act) {
+    window.__lastAct = r.act;
+    const names = ['', 'THE EMBER RUINS', 'THE FROZEN DEEP', 'THE HOLLOW SPIRE'];
+    if (r.act > 1) toast(`ACT ${r.act} — ${names[r.act] || ''}`, 3500);
+  }
   renderRelicBar();
   renderPotionsBar();
   const wrap = $id('map-wrap');
@@ -255,6 +268,8 @@ function renderCombat() {
     if (!e.alive) return;
     const n = el('div', 'enemy', '');
     n.dataset.idx = idx;
+    const art = el('div', 'enemy-art', e.data.art || '☠');
+    n.append(art);
     const intent = intents[idx];
     if (intent) {
       const badge = el('div', 'intent', intentBadge(intent));
@@ -706,6 +721,13 @@ function showEnd() {
   updateTopbar();
   const win = G.run.finished === 'victory';
   if (win) sfx.victory();
+  try {
+    const best = JSON.parse(localStorage.getItem(SAVE_KEY + '.best') || 'null');
+    const cur = { act: G.run.act, win, seed: G.run.seed, when: new Date().toISOString().slice(0, 10) };
+    if (!best || (win && !best.win) || (!win && !best.win && cur.act > best.act)) {
+      localStorage.setItem(SAVE_KEY + '.best', JSON.stringify(cur));
+    }
+  } catch {}
   if (win) clearSave();
   const body = $id('end-body');
   body.innerHTML = '';
