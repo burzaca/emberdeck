@@ -9,7 +9,13 @@ play it, fork it, break it.
 
 > **Play now:** https://burzaca.github.io/emberdeck/
 
-![class select placeholder — screenshot added by agent](_docs/shot-class.png)
+![title](_docs/shot-title.png)
+![map](_docs/shot-map.png)
+![combat](_docs/shot-combat.png)
+
+Works on phones too:
+
+![mobile](_docs/shot-mobile.png)
 
 ## What it is
 
