@@ -13,7 +13,7 @@ import {
 import { BUFF_INFO } from '../engine/effects.js';
 import { el, $id, show, toast, initTooltips, modal, closeModal, esc } from './dom.js';
 import { cardNode } from './cards.js';
-import { sfx } from './sfx.js';
+import { sfx, setMuted, isMuted } from './sfx.js';
 
 const SAVE_KEY = 'emberd…e.v1';
 const G = { run: null, combat: null, selectedUid: null, reward: null, takenCards: false };
@@ -38,6 +38,10 @@ window.addEventListener('DOMContentLoaded', () => {
     show('screen-class');
   });
   $id('btn-howto').addEventListener('click', showHowTo);
+  const sndBtn = $id('btn-sound');
+  const paintSnd = () => { sndBtn.textContent = isMuted() ? '🔇' : '🔊'; };
+  paintSnd();
+  sndBtn.addEventListener('click', () => { setMuted(!isMuted()); paintSnd(); if (!isMuted()) sfx.click(); });
   $id('btn-menu').addEventListener('click', showMenu);
   $id('modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
   const saved = loadSave();
@@ -203,6 +207,10 @@ function goNode(row, col) {
       G.selectedUid = null;
       show('screen-combat');
       renderCombat();
+      if (!localStorage.getItem(SAVE_KEY + '.taught')) {
+        toast('Click an attack card, then click the enemy. Read the intent above its head.', 5000);
+        try { localStorage.setItem(SAVE_KEY + '.taught', '1'); } catch {}
+      }
       break;
     }
     case 'rest': showRest(); break;
@@ -359,6 +367,15 @@ function showFloaters(C, sinceIdx) {
     if (e.t === 'block') floatOver('#player-avatar', `🛡${e.amount}`, 'float-block');
   }
 }
+function showEnemyFloaters(C, sinceIdx) {
+  for (const e of C.log.slice(sinceIdx)) {
+    if (e.t === 'enemy_move' && (e.intent === 'attack' || e.intent === 'attack_debuff')) sfx.hit();
+    if (e.t === 'enemy_move' && e.intent === 'debuff') sfx.debuff();
+    if (e.t === 'enemy_move' && (e.intent === 'buff' || e.intent === 'strength_up' || e.intent === 'ritual')) sfx.buff();
+  }
+  const pHp = C.player.hp;
+  if (C._hpBeforeEnemy != null && pHp < C._hpBeforeEnemy) floatOver('#player-avatar', `-${C._hpBeforeEnemy - pHp}`, 'float-dmg');
+}
 function floatOver(sel, text, cls) {
   const host = document.querySelector(sel);
   if (!host) return;
@@ -419,8 +436,11 @@ document.addEventListener('click', (e) => {
   if (e.target.id === 'btn-endturn' && G.combat && !G.combat.over) {
     G.selectedUid = null;
     sfx.click();
+    const logMark = G.combat.log.length;
+    G.combat._hpBeforeEnemy = G.combat.player.hp;
     endTurn(G.combat);
     G.run.stats.turns++;
+    showEnemyFloaters(G.combat, logMark);
     afterAction();
   }
 });

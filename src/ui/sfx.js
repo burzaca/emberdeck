@@ -1,6 +1,11 @@
 // Tiny procedural sound engine — no assets, WebAudio only.
 let ctx = null;
+let muted = false;
+try { muted = localStorage.getItem('emberdeck.muted') === '1'; } catch {}
+export function setMuted(m) { muted = m; try { localStorage.setItem('emberdeck.muted', m ? '1' : '0'); } catch {} }
+export function isMuted() { return muted; }
 function ac() {
+  if (muted) return null;
   if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
   if (ctx.state === 'suspended') ctx.resume();
   return ctx;
@@ -8,6 +13,7 @@ function ac() {
 
 function tone({ f = 440, f2 = null, t = 0.15, type = 'sine', vol = 0.2, delay = 0, curve = 'exp' }) {
   const a = ac();
+  if (!a) return;
   const o = a.createOscillator();
   const g = a.createGain();
   o.type = type;
@@ -25,6 +31,7 @@ function tone({ f = 440, f2 = null, t = 0.15, type = 'sine', vol = 0.2, delay = 
 
 function noise({ t = 0.12, vol = 0.15, delay = 0, hp = 800 }) {
   const a = ac();
+  if (!a) return;
   const buf = a.createBuffer(1, a.sampleRate * t, a.sampleRate);
   const d = buf.getChannelData(0);
   for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
