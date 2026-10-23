@@ -63,6 +63,8 @@ line. The bot is a conservative sparring partner; a good human does better.
 - `END TURN` passes to the enemy phase. Draw/discard piles are clickable.
 - Keyboard: `1-9` play the matching card, `E` / `Enter` ends the turn.
 - **Daily Run** — everyone gets the same map that day. Beat your friends.
+- **Mid-fight saves** — close the tab anywhere, even mid-boss; Continue resumes
+  the exact fight, hand and intents included.
 - Works with touch. Portrait and landscape.
 
 ## Run it locally
