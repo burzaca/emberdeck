@@ -60,6 +60,7 @@ line. The bot is a conservative sparring partner; a good human does better.
 
 - Click a node on the map to travel (only glowing nodes are reachable).
 - Click an attack card → click a target. Skills/Powers play on click.
+- On touch you can also **drag a card onto the target** and release to play it.
 - `END TURN` passes to the enemy phase. Draw/discard piles are clickable.
 - Keyboard: `1-9` play the matching card, `E` / `Enter` ends the turn.
 - **Daily Run** — everyone gets the same map that day. Beat your friends.

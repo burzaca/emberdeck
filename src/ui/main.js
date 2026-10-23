@@ -337,6 +337,24 @@ function renderCombat() {
       disabled: !playable,
       onClick: () => onCardClick(inst, card),
     });
+    // drag-to-play: press a card, release over a target to play it
+    if (playable && card.target === 'enemy') {
+      n.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse') return; // mouse uses click flow
+        G.selectedUid = inst.uid;
+        n.classList.add('selected');
+        n.setPointerCapture?.(e.pointerId);
+      });
+      n.addEventListener('pointerup', (e) => {
+        if (e.pointerType === 'mouse' || G.selectedUid !== inst.uid) return;
+        const elUnder = document.elementFromPoint(e.clientX, e.clientY);
+        const enemyEl = elUnder?.closest?.('.enemy');
+        if (enemyEl) {
+          const idx = [...document.querySelectorAll('.enemy')].indexOf(enemyEl);
+          playSelectedAt(idx);
+        }
+      });
+    }
     n.style.setProperty('--i', i);
     n.style.setProperty('--x', `${(i - (cards.length - 1) / 2) * spread}px`);
     n.style.setProperty('--rot', `${(i - (cards.length - 1) / 2) * 3.2}deg`);
@@ -373,6 +391,16 @@ function intentBadge(it) {
     case 'ritual': return '🔮';
     default: return '?';
   }
+}
+
+function playSelectedAt(idx) {
+  const C = G.combat;
+  if (!C || G.selectedUid == null) return;
+  const logMark = C.log.length;
+  const r = playCard(C, G.selectedUid, idx);
+  G.selectedUid = null;
+  if (r.ok) { sfx.card(); showFloaters(C, logMark); }
+  afterAction();
 }
 
 function onCardClick(inst, card) {
