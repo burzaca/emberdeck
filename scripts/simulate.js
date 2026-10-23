@@ -41,11 +41,36 @@ function autoCombat(run, C) {
       const isAtk = (x) => has(x, 'damage');
       const isBlk = (x) => has(x, 'block');
       const isPow = (x) => (x.chk.card.type === 'power' || has(x, 'buff') || has(x, 'debuff') || has(x, 'draw') || has(x, 'energy'));
+      const debuffValue = (x) => {
+        const effs = x.chk.card.effects || [];
+        const tgt = alive[0];
+        if (!tgt) return 0;
+        let v = 0;
+        for (const e of effs) {
+          if (e.t === 'debuff' || e.t === 'apply') {
+            const b = e.buff || (e.debuff && e.debuff.buff);
+            if (!b) continue;
+            const already = tgt.buffs[b] > 0;
+            if (b === 'vulnerable') v += already ? 10 : 55;
+            if (b === 'frail') v += already ? 8 : 45;
+            if (b === 'poison') v += already ? 20 : 40;
+            if (b === 'entangle') v += 30;
+          }
+        }
+        return v;
+      };
       const early = C.turn <= 2;
       let ordered;
-      if (needBlock) ordered = [...playable.filter(isBlk), ...playable.filter((x) => !isBlk(x))];
-      else if (early) ordered = [...playable.filter(isPow), ...playable.filter((x) => !isPow(x) && isAtk(x)), ...playable.filter((x) => !isPow(x) && !isAtk(x))];
-      else ordered = [...playable.filter(isAtk), ...playable.filter((x) => !isAtk(x))];
+      const scoreCard = (x) => {
+        if (needBlock && isBlk(x)) return 100;
+        const dv = debuffValue(x);
+        if (isAtk(x)) return 60 + dv * 0.3;
+        if (dv > 0) return 40 + dv;
+        if (isPow(x) && early) return 50;
+        if (isBlk(x)) return 30;
+        return 20;
+      };
+      ordered = [...playable].sort((a, b) => scoreCard(b) - scoreCard(a));
       for (const { inst, chk } of ordered) {
         const res = playCard(C, inst.uid, isAtk({ inst, chk }) ? tIdx : null);
         if (res.ok) { played = true; break; }

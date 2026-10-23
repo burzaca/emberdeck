@@ -9,8 +9,8 @@ export const relics = [
     text: 'At the start of combat, gain 1 Regen.',
     hooks: { combat_start: [{ t: 'buff', target: 'self', buff: 'regen', n: 1 }] } },
   { id: 'r_lastbreath', name: 'Last Breath', rarity: 'common', starter: true,
-    text: 'At the start of combat, gain 1 Thorns.',
-    hooks: { combat_start: [{ t: 'buff', target: 'self', buff: 'thorns', n: 1 }] } },
+    text: 'At the start of combat, gain 2 Block and 1 Thorns.',
+    hooks: { combat_start: [{ t: 'block', n: 2 }, { t: 'buff', target: 'self', buff: 'thorns', n: 1 }] } },
 
   // ---- common ----
   { id: 'r_ember_heart', name: 'Ember Heart', rarity: 'common',

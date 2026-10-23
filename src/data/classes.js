@@ -23,7 +23,7 @@ export const classes = [
   {
     id: 'gravewarden',
     name: 'Gravewarden',
-    hp: 65,
+    hp: 70,
     blurb: 'A keeper of quiet doors. Controls the fight so thoroughly that it ends by itself.',
     starting_deck: ['gw_strike', 'gw_strike', 'gw_strike', 'gw_strike', 'gw_strike',
       'gw_guard', 'gw_guard', 'gw_guard', 'gw_guard', 'gw_grasp'],

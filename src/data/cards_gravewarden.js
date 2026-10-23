@@ -145,7 +145,7 @@ export const cards = [
     rarity: 'common',
     target: 'enemy',
     text: 'Deal $dmg damage. Gain $blk Block.',
-    base: { dmg: 6, blk: 3 },
+    base: { dmg: 7, blk: 4 },
     up: { dmg: 2, blk: 1 },
     effects: [ { t: 'damage', n: '$dmg' }, { t: 'block', n: '$blk' } ]
   },
