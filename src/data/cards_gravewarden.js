@@ -21,13 +21,13 @@ export const cards = [
   effects: [ { t:'damage', n:'$dmg' }, { t:'buff', target:'target', buff:'vulnerable', n:'$vn' } ],
 },
 {
-  id: 'gw_chill', name: 'Chilling Touch', cost: 1, type: 'skill', rarity: 'common', target: 'enemy',
+  id: 'gw_chill', name: 'Chilling Touch', art: '💧', cost: 1, type: 'skill', rarity: 'common', target: 'enemy',
   text: 'Apply $fr Frail. Draw $draw cards.',
   base: { fr: 2, draw: 1 }, up: { fr: 1, draw: 1 },
   effects: [ { t:'buff', target:'target', buff:'frail', n:'$fr' }, { t:'draw', n:'$draw' } ],
 },
 {
-  id: 'gw_decay', name: 'Decay', cost: 1, type: 'skill', rarity: 'common', target: 'enemy',
+  id: 'gw_decay', name: 'Decay', art: '☠️', cost: 1, type: 'skill', rarity: 'common', target: 'enemy',
   text: 'Apply $psn Poison. Apply $fr Frail.',
   base: { psn: 4, fr: 1 }, up: { psn: 2, fr: 1 },
   effects: [ { t:'buff', target:'target', buff:'poison', n:'$psn' }, { t:'buff', target:'target', buff:'frail', n:'$fr' } ],
@@ -39,7 +39,7 @@ export const cards = [
   effects: [ { t:'self_damage', n:'$hp' }, { t:'draw', n:'$draw' } ],
 },
 {
-  id: 'gw_memento', name: 'Memento', cost: 1, type: 'power', rarity: 'common', target: 'self',
+  id: 'gw_memento', name: 'Memento', art: '🛡️', cost: 1, type: 'power', rarity: 'common', target: 'self',
   text: 'At end of turn, gain $mtc Block (Metallicize).',
   base: { mtc: 2 }, up: { mtc: 1 },
   effects: [ { t:'buff', target:'self', buff:'metallicize', n:'$mtc' } ],
@@ -70,20 +70,20 @@ export const cards = [
   effects: [ { t:'block', n:'$blk' }, { t:'buff', target:'self', buff:'shield', n:'$shd' } ],
 },
 {
-  id: 'gw_omen', name: 'Omen', cost: 1, type: 'skill', rarity: 'uncommon', target: 'enemy',
+  id: 'gw_omen', name: 'Omen', art: '👁️', cost: 1, type: 'skill', rarity: 'uncommon', target: 'enemy',
   text: 'Deal $dmg damage. If target has Frail or Vulnerable, draw $draw cards.',
   base: { dmg: 6, draw: 2 }, up: { dmg: 3, draw: 1 },
   effects: [ { t:'damage', n:'$dmg' }, { t:'draw', n:'$draw' } ],
 },
 {
-  id: 'gw_fading', name: 'Fading Echo', cost: 0, type: 'skill', rarity: 'uncommon', target: 'self',
+  id: 'gw_fading', name: 'Fading Echo', art: '👻', cost: 0, type: 'skill', rarity: 'uncommon', target: 'self',
   text: 'Discard your hand. Draw $draw cards.',
   base: { draw: 3 }, up: { draw: 2 },
   effects: [ { t:'discard_all', hand: true }, { t:'draw', n:'$draw' } ],
 },
 // Rares
 {
-  id: 'gw_ossuary', name: 'Ossuary', cost: 2, type: 'power', rarity: 'rare', target: 'self',
+  id: 'gw_ossuary', name: 'Ossuary', art: '⚰️', cost: 2, type: 'power', rarity: 'rare', target: 'self',
   text: 'At turn end, gain $mtc Block. Lose $hp HP each turn.',
   base: { mtc: 4, hp: 2 }, up: { mtc: 2, hp: 1 },
   effects: [ { t:'buff', target:'self', buff:'metallicize', n:'$mtc' }, { t:'self_damage', n:'$hp' } ],
@@ -113,13 +113,13 @@ export const cards = [
   effects: [ { t:'buff', target:'self', buff:'metallicize', n:'$blk' }, { t:'draw', n:'$draw' } ],
 },
 {
-  id: 'gw_purge', name: 'Purge', cost: 1, type: 'skill', rarity: 'rare', target: 'self',
+  id: 'gw_purge', name: 'Purge', art: '🔥', cost: 1, type: 'skill', rarity: 'rare', target: 'self',
   text: 'Exhaust your hand. Draw $draw cards.',
   base: { draw: 3 }, up: { draw: 2 },
   effects: [ { t:'exhaust_hand' }, { t:'draw', n:'$draw' } ],
 },
 {
-  id: 'gw_horrify', name: 'Horrify', cost: 1, type: 'attack', rarity: 'uncommon', target: 'all_enemies',
+  id: 'gw_horrify', name: 'Horrify', art: '😱', cost: 1, type: 'attack', rarity: 'uncommon', target: 'all_enemies',
   text: 'Deal $dmg damage to ALL enemies. Apply $fr Frail.',
   base: { dmg: 5, fr: 1 }, up: { dmg: 2, fr: 1 },
   effects: [ { t:'damage', n:'$dmg', hits:'all' }, { t:'buff', target:'all_enemies', buff:'frail', n:'$fr' } ],
@@ -131,7 +131,7 @@ export const cards = [
   effects: [ { t:'block', n:'$blk' }, { t:'self_damage', n:'$hp' } ],
 },
 {
-  id: 'gw_torment', name: 'Torment', cost: 1, type: 'attack', rarity: 'uncommon', target: 'enemy',
+  id: 'gw_torment', name: 'Torment', art: '😖', cost: 1, type: 'attack', rarity: 'uncommon', target: 'enemy',
   text: 'Deal $dmg damage. Apply $psn Poison.',
   base: { dmg: 8, psn: 3 }, up: { dmg: 3, psn: 2 },
   effects: [ { t:'damage', n:'$dmg' }, { t:'buff', target:'target', buff:'poison', n:'$psn' } ],

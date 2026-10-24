@@ -84,6 +84,7 @@ export const cards = [
   {
     id: 'c_fragile',
     name: 'Fragile',
+    art: '💔',
     cost: 1,
     type: 'attack',
     rarity: 'common',
@@ -96,6 +97,7 @@ export const cards = [
   {
     id: 'c_deft',
     name: 'Deft Feet',
+    art: '💨',
     cost: 1,
     type: 'skill',
     rarity: 'uncommon',
@@ -108,6 +110,7 @@ export const cards = [
   {
     id: 'c_bash',
     name: 'Bash',
+    art: '🔨',
     cost: 1,
     type: 'attack',
     rarity: 'common',
@@ -120,6 +123,7 @@ export const cards = [
   {
     id: 'c_mysticbrew',
     name: 'Mystic Brew',
+    art: '🧪',
     cost: 0,
     type: 'skill',
     rarity: 'rare',
@@ -132,6 +136,7 @@ export const cards = [
   {
     id: 'c_penance',
     name: 'Penance',
+    art: '🩸',
     cost: 2,
     type: 'attack',
     rarity: 'rare',

@@ -63,6 +63,7 @@ export const cards = [
   {
     id: 'ew_ragingblow',
     name: 'Raging Blow',
+    art: '💢',
     cost: 1,
     type: 'attack',
     rarity: 'common',
@@ -78,6 +79,7 @@ export const cards = [
   {
     id: 'ew_sear',
     name: 'Sear',
+    art: '🔥',
     cost: 1,
     type: 'attack',
     rarity: 'common',
@@ -126,6 +128,7 @@ export const cards = [
   {
     id: 'ew_conflagrate',
     name: 'Conflagrate',
+    art: '🔥',
     cost: 2,
     type: 'attack',
     rarity: 'uncommon',
@@ -157,6 +160,7 @@ export const cards = [
   {
     id: 'ew_heatup',
     name: 'Heat Up',
+    art: '📈',
     cost: 1,
     type: 'power',
     rarity: 'uncommon',
@@ -198,6 +202,7 @@ export const cards = [
   {
     id: 'ew_blazingfinish',
     name: 'Blazing Finish',
+    art: '🌟',
     cost: 1,
     type: 'attack',
     rarity: 'uncommon',
@@ -256,6 +261,7 @@ export const cards = [
   {
     id: 'ew_volcanicrush',
     name: 'Volcanic Rush',
+    art: '🌋',
     cost: 2,
     type: 'attack',
     rarity: 'rare',
@@ -281,6 +287,7 @@ export const cards = [
   {
     id: 'ew_moltenarmor',
     name: 'Molten Armor',
+    art: '🛡️',
     cost: 2,
     type: 'skill',
     rarity: 'rare',
@@ -350,6 +357,7 @@ export const cards = [
   {
     id: 'ew_fierygrasp',
     name: 'Fiery Grasp',
+    art: '🪨',
     cost: 1,
     type: 'attack',
     rarity: 'common',
