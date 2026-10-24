@@ -147,7 +147,8 @@ button { font-family: inherit; cursor: pointer; }
 @keyframes pulse { 50% { box-shadow: 0 0 22px rgba(255, 138, 61, .55); } }
 .potions-bar { display: flex; gap: 8px; margin-top: 10px; min-height: 34px; }
 .potion-chip {
-  width: 34px; height: 34px; border-radius: 10px; font-size: 17px;
+  min-width: 34px; height: 34px; padding: 0 9px; border-radius: 10px;
+  font-size: 12px; font-weight: 700; white-space: nowrap;
   background: #1c2418; border: 1px solid #3a4a2c; color: #9ad07a;
 }
 
@@ -360,5 +361,7 @@ body[data-char=gravewarden] .avatar-core::before { content: '💀'; }
   .player-side { margin-bottom: 160px; }
   .enemies-row { gap: 14px; }
   .enemy { width: 120px; }
-  .combat-controls { bottom: 205px; }
+  .combat-controls { bottom: 264px; right: 8px; }
+  .combat-controls .potions-bar { margin-top: 0; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+  .combat-controls .potion-chip { font-size: 10.5px; height: 28px; padding: 0 7px; }
 }
