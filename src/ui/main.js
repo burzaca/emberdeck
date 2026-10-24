@@ -19,6 +19,7 @@ import { sfx, setMuted, isMuted } from './sfx.js';
 const SAVE_KEY = 'emberd…e.v1';
 const G = { run: null, combat: null, selectedUid: null, reward: null, takenCards: false };
 window.__emberdeck = G; // debug/test hook
+window.__dbg = { showShop, renderPotionsBar };
 window.__forceShop = () => { if (G.run) { G.run.shop = generateShop(G.run); showShop(); } };
 window.__forceRest = () => { if (G.run) showRest(); };
 window.__forceEnd = (win) => { if (G.run) { G.run.finished = win ? 'victory' : 'death'; showEnd(); } };
@@ -122,6 +123,14 @@ function updateTopbar() {
   $id('tb-act').textContent = `ACT ${r.act}`;
   $id('tb-gold').textContent = `◉ ${r.gold}`;
   $id('tb-hp').textContent = `❤ ${r.hp}/${r.maxHp}`;
+  const C = G.combat;
+  const inCombat = !!C && !C.over && !$id('screen-combat').classList.contains('hidden');
+  $id('tb-energy').classList.toggle('hidden', !inCombat);
+  $id('tb-block').classList.toggle('hidden', !inCombat || !(C.player.block > 0));
+  if (inCombat) {
+    $id('tb-energy').textContent = `⚡ ${C.player.energy}/${C.baseEnergy}`;
+    $id('tb-block').textContent = `🛡 ${C.player.block}`;
+  }
 }
 
 // ---------- map ----------
@@ -181,7 +190,22 @@ function showMap() {
     node.style.left = x + 'px'; node.style.top = y + 'px';
     node.textContent = NODE_ICON[n.type] || '?';
     node.setAttribute('data-tip', NODE_TIP[n.type] || '');
-    if (canGo) node.addEventListener('click', () => goNode(n.row, n.col));
+    if (canGo) {
+      const label = el('span', 'node-label', NODE_TIP[n.type] || '');
+      node.append(label);
+      node.addEventListener('click', () => {
+        if (window.matchMedia('(hover: none)').matches) {
+          if (node.dataset.armed !== '1') {
+            document.querySelectorAll('.map-node[data-armed]').forEach(x => delete x.dataset.armed);
+            node.dataset.armed = '1';
+            node.classList.add('armed');
+            toast(`${NODE_TIP[n.type]} — tap again to enter`, 2500);
+            return;
+          }
+        }
+        goNode(n.row, n.col);
+      });
+    }
     nodesEl.append(node);
   }
   wrap.scrollTop = wrap.scrollHeight;
@@ -206,23 +230,42 @@ function renderPotionsBar(targetEl) {
     const inCombat = !!G.combat;
     if (inCombat && !p.combat_only) continue;
     if (!inCombat && p.combat_only) continue;
-    const chip = el('button', 'potion-chip', '⚗');
+    const chip = el('button', 'potion-chip', `⚗ ${esc(p.name)}`);
     chip.setAttribute('data-tip', `<b>${esc(p.name)}</b><br>${esc(p.text)}`);
     chip.addEventListener('click', () => {
-      if (G.combat) {
-        usePotion(G.combat, pid);
-        G.run.potions = G.run.potions.filter(x => x !== pid);
-        G.run.hp = Math.max(0, G.combat.player.hp);
-        updateTopbar();
-        renderCombat();
-      } else {
-        applyRunEffects(G.run, p.effects);
-        G.run.potions = G.run.potions.filter(x => x !== pid);
-        toast(`Used ${p.name}`);
-        showMap();
+      if (window.matchMedia('(hover: none)').matches) {
+        const box = el('div', 'modal-box');
+        box.append(el('h3', null, `⚗ ${p.name}`));
+        box.append(el('p', null, p.text));
+        const row = el('div', 'modal-row');
+        const yes = el('button', 'big-btn', 'Use it');
+        const no = el('button', 'big-btn ghost', 'Keep it');
+        no.addEventListener('click', closeModal);
+        row.append(yes, no);
+        box.append(row);
+        modal(box);
+        yes.addEventListener('click', () => { closeModal(); usePotionNow(pid, inCombat); });
+        return;
       }
+      usePotionNow(pid, inCombat);
     });
     bar.append(chip);
+  }
+}
+
+function usePotionNow(pid, inCombat) {
+  if (G.combat) {
+    usePotion(G.combat, pid);
+    G.run.potions = G.run.potions.filter(x => x !== pid);
+    G.run.hp = Math.max(0, G.combat.player.hp);
+    updateTopbar();
+    renderCombat();
+  } else {
+    const p = DATA.potionById.get(pid);
+    applyRunEffects(G.run, p.effects);
+    G.run.potions = G.run.potions.filter(x => x !== pid);
+    toast(`Used ${p.name}`);
+    showMap();
   }
 }
 
@@ -631,7 +674,8 @@ function showShop() {
   const misc = el('div', 'shop-misc');
   shop.potions.forEach(item => {
     const p = DATA.potionById.get(item.id);
-    const b = el('button', 'shop-item', `⚗ ${p.name} — ◉${item.price}`);
+    const b = el('button', 'shop-item', '');
+    b.innerHTML = `<span class="si-name">⚗ ${esc(p.name)}</span><span class="si-desc">${esc(p.text)}</span><span class="si-price">◉ ${item.price}</span>`;
     b.setAttribute('data-tip', esc(p.text));
     b.disabled = item.sold || G.run.gold < item.price;
     b.addEventListener('click', () => { if (buyShopItem(G.run, item)) showShop(); });
@@ -639,13 +683,15 @@ function showShop() {
   });
   if (shop.relic) {
     const r = DATA.relicById.get(shop.relic.id);
-    const b = el('button', 'shop-item', `◆ ${r.name} — ◉${shop.relic.price}`);
+    const b = el('button', 'shop-item', '');
+    b.innerHTML = `<span class="si-name">◆ ${esc(r.name)}</span><span class="si-desc">${esc(r.text)}</span><span class="si-price">◉ ${shop.relic.price}</span>`;
     b.setAttribute('data-tip', esc(r.text));
     b.disabled = shop.relic.sold || G.run.gold < shop.relic.price;
     b.addEventListener('click', () => { if (buyShopItem(G.run, shop.relic)) showShop(); });
     misc.append(b);
   }
-  const rm = el('button', 'shop-item', `✂ Remove a card — ◉${shop.removeCost}`);
+  const rm = el('button', 'shop-item', '');
+  rm.innerHTML = `<span class="si-name">✂ Remove a card</span><span class="si-desc">Take one card out of your deck forever.</span><span class="si-price">◉ ${shop.removeCost}</span>`;
   rm.disabled = shop.removed || G.run.gold < shop.removeCost;
   rm.addEventListener('click', () => pickCardModal('Remove which card?', (uid) => {
     if (shopRemoveCard(G.run, uid)) { closeModal(); toast('Card removed'); showShop(); }
